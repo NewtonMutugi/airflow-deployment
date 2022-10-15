@@ -1,0 +1,13 @@
+### Dockerfile dependencies
+*.gz
+*.tgz
+*.jar
+
+### Prod and local env files
+*.env
+
+## Locally generated files
+local/dags/
+local/logs/
+local/plugins/
+local/sparkapps/
