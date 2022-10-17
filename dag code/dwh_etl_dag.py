@@ -28,7 +28,7 @@ spark_driver_block_manager_port = Variable.get("SPARK_DRIVER_BLOCK_MANAGER_PORT"
 spark_driver_host = Variable.get("SPARK_DRIVER_HOST")
 spark_driver_bind_address = Variable.get("SPARK_DRIVER_BIND_ADDRESS")
 
-lf_spark_source_databse_name = Variable.get("LF_SPARK_SOURCE_DATABSE_NAME")
+lf_spark_source_databse_name = Variable.get("LF_SPARK_SOURCE_DATABASE_NAME")
 lf_spark_source_metadata_table = Variable.get("LF_SPARK_SOURCE_METADATA_TABLE")
 lf_spark_source_database_host = Variable.get("LF_SPARK_SOURCE_DATABASE_HOST")
 lf_spark_source_url = Variable.get("LF_SPARK_SOURCE_URL")
