@@ -25,6 +25,7 @@ x-airflow-common:
     redis:
       condition: service_healthy
 
+services:
   redis:
     image: redis:${REDIS_VERSION}
     expose:
