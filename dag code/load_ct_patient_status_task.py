@@ -25,14 +25,14 @@ lps_spark_source_metadata_table = Variable.get("LPS_SPARK_SOURCE_METADATA_TABLE"
 lps_spark_sink_dbtable = Variable.get("LPS_SPARK_SINK_DBTABLE")
 
 def build_load_ct_patient_status_task(dag:DAG):
-    load_ct_patient_status = SparkSubmitOperator(task_id='load_patient_labs',
+    load_ct_patient_status = SparkSubmitOperator(task_id='load_ct_patient_status',
                                               conn_id='spark_standalone',
-                                              application=f'{spark_app_home}/load-ct-patient-labs-1.0-SNAPSHOT-jar-with-dependencies.jar',
+                                              application=f'{spark_app_home}/load-ct-patient-status-1.0-SNAPSHOT-jar-with-dependencies.jar',
                                               total_executor_cores=1,
                                               executor_cores=1,
                                               executor_memory='1g',
                                               driver_memory='1g',
-                                              name='load_patient_labs',
+                                              name='load_ct_patient_status',
                                               conf={
                                                 "spark.driver.port":spark_driver_port,
                                                 "spark.driver.blockManager.port":spark_driver_block_manager_port,

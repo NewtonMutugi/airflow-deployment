@@ -21,25 +21,25 @@ dc_spark_sink_driver = Variable.get("DC_SPARK_SINK_DRIVER")
 dc_spark_sink_user = Variable.get("DC_SPARK_SINK_USER")
 dc_spark_sink_password = Variable.get("DC_SPARK_SINK_PASSWORD")
 
-lp_spark_source_metadata_table = Variable.get("LP_SPARK_SOURCE_METADATA_TABLE")
-lp_spark_sink_dbtable = Variable.get("LP_SPARK_SINK_DBTABLE")
+lpp_spark_source_metadata_table = Variable.get("LPP_SPARK_SOURCE_METADATA_TABLE")
+lpp_spark_sink_dbtable = Variable.get("LPP_SPARK_SINK_DBTABLE")
 
-def build_load_ct_patients_task(dag:DAG):
-    load_ct_patients = SparkSubmitOperator(task_id='load_ct_patients',
+def build_load_patient_pharmacy_task(dag:DAG):
+    load_patient_pharmacy = SparkSubmitOperator(task_id='load_patient_pharmacy',
                                               conn_id='spark_standalone',
-                                              application=f'{spark_app_home}/load-ct-patients-1.0-SNAPSHOT-jar-with-dependencies.jar',
+                                              application=f'{spark_app_home}/load-patient-pharmacy-1.0-SNAPSHOT-jar-with-dependencies.jar',
                                               total_executor_cores=1,
                                               executor_cores=1,
                                               executor_memory='1g',
                                               driver_memory='1g',
-                                              name='load_ct_patients',
+                                              name='load_patient_pharmacy',
                                               conf={
                                                 "spark.driver.port":spark_driver_port,
                                                 "spark.driver.blockManager.port":spark_driver_block_manager_port,
                                                 "spark.driver.host": spark_driver_host,
                                                 "spark.driver.bindAddress": spark_driver_bind_address,
                                                 "spark.source.database-name": dc_spark_source_database_name,
-                                                "spark.source.metadata-table": lp_spark_source_metadata_table,
+                                                "spark.source.metadata-table": lpp_spark_source_metadata_table,
                                                 "spark.source.database-host": dc_spark_source_database_host,
                                                 "spark.source.url": dc_spark_source_url,
                                                 "spark.source.driver": dc_spark_source_driver,
@@ -50,9 +50,9 @@ def build_load_ct_patients_task(dag:DAG):
                                                 "spark.sink.driver": dc_spark_sink_driver,
                                                 "spark.sink.user":dc_spark_sink_user ,
                                                 "spark.sink.password":dc_spark_sink_password,
-                                                "spark.sink.dbtable":lp_spark_sink_dbtable
+                                                "spark.sink.dbtable":lpp_spark_sink_dbtable
                                               },
                                               execution_timeout=timedelta(minutes=10),
                                               dag=dag
                                               )
-    return load_ct_patients
+    return load_patient_pharmacy
