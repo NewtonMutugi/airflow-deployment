@@ -5,9 +5,10 @@
 
 ### Prod and local env files
 *.env
+/production/*.json
 
 ## Locally generated files
-local/dags/
-local/logs/
-local/plugins/
-local/sparkapps/
+*/dags/
+*/logs/
+*/plugins/
+*/sparkapps/
