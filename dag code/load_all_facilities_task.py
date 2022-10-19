@@ -9,6 +9,10 @@ spark_driver_block_manager_port = Variable.get("SPARK_DRIVER_BLOCK_MANAGER_PORT"
 spark_driver_host = Variable.get("SPARK_DRIVER_HOST")
 spark_driver_bind_address = Variable.get("SPARK_DRIVER_BIND_ADDRESS")
 
+spark_openlineage_host = Variable.get("SPARK_OPENLINEAGE_HOST")
+spark_extra_listeners = Variable.get("SPARK_EXTRA_LISTENERS")
+spark_openlineage_namespace = Variable.get("SPARK_OPENLINEAGE_NAMESPACE")
+
 lf_spark_source_metadata_table = Variable.get("LF_SPARK_SOURCE_METADATA_TABLE")
 lf_spark_source_database_name = Variable.get("LF_SPARK_SOURCE_DATABASE_NAME")
 lf_spark_source_database_host = Variable.get("LF_SPARK_SOURCE_DATABASE_HOST")
@@ -33,6 +37,9 @@ def build_load_all_facilities_task(dag: DAG) -> SparkSubmitOperator:
                                               driver_memory='1g',
                                               name='load_facilities',
                                               conf={
+                                                # "spark.openlineage.namespace": spark_openlineage_namespace,                                                
+                                                # "spark.openlineage.host": spark_openlineage_host,
+                                                # "spark.extraListeners": spark_extra_listeners, 
                                                 "spark.driver.port":spark_driver_port,
                                                 "spark.driver.blockManager.port":spark_driver_block_manager_port,
                                                 "spark.driver.host": spark_driver_host,

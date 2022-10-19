@@ -9,6 +9,10 @@ spark_driver_block_manager_port = Variable.get("SPARK_DRIVER_BLOCK_MANAGER_PORT"
 spark_driver_host = Variable.get("SPARK_DRIVER_HOST")
 spark_driver_bind_address = Variable.get("SPARK_DRIVER_BIND_ADDRESS")
 
+spark_openlineage_host = Variable.get("SPARK_OPENLINEAGE_HOST")
+spark_extra_listeners = Variable.get("SPARK_EXTRA_LISTENERS")
+spark_openlineage_namespace = Variable.get("SPARK_OPENLINEAGE_NAMESPACE")
+
 dc_spark_source_database_name = Variable.get("DC_SPARK_SOURCE_DATABASE_NAME")
 dc_spark_source_database_host = Variable.get("DC_SPARK_SOURCE_DATABASE_HOST")
 dc_spark_source_url = Variable.get("DC_SPARK_SOURCE_URL")
@@ -34,6 +38,9 @@ def build_load_ct_patient_visits_task(dag:DAG):
                                               driver_memory='1g',
                                               name='load_ct_patient_visits',
                                               conf={
+                                                # "spark.openlineage.namespace": spark_openlineage_namespace,
+                                                # "spark.openlineage.host": spark_openlineage_host,
+                                                # "spark.extraListeners": spark_extra_listeners,                                                
                                                 "spark.driver.port":spark_driver_port,
                                                 "spark.driver.blockManager.port":spark_driver_block_manager_port,
                                                 "spark.driver.host": spark_driver_host,

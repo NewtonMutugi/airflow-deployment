@@ -23,7 +23,7 @@ default_args = {
 dag = DAG(dag_id='dwh_etl_dag',
           default_args=default_args,
           catchup=False,
-          schedule_interval="0 * * * *")
+          schedule_interval="0 12 15 * *")
 
 load_facilities = build_load_all_facilities_task(dag = dag)
 load_art_patients = build_load_art_patients_task(dag = dag)
