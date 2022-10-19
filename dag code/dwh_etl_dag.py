@@ -7,6 +7,7 @@ from includes.load_all_facilities_task import build_load_all_facilities_task
 from includes.load_art_patients_task import build_load_art_patients_task
 from includes.load_ct_patient_visits_task import build_load_ct_patient_visits_task
 from includes.load_adverse_events_task import build_load_adverse_events_task
+from includes.load_ct_patient_labs_task import build_load_patient_labs_task
 
 local_tz = pendulum.timezone("Africa/Nairobi")
 
@@ -29,5 +30,6 @@ load_facilities = build_load_all_facilities_task(dag = dag)
 load_art_patients = build_load_art_patients_task(dag = dag)
 load_ct_patients = build_load_ct_patient_visits_task(dag = dag)
 load_adverse_events = build_load_adverse_events_task(dag = dag)
+load_patient_labs = build_load_patient_labs_task(dag = dag)
 
-load_facilities >> load_art_patients >> load_ct_patients >> load_adverse_events
+load_facilities >> load_art_patients >> load_ct_patients >> load_adverse_events >> load_patient_labs
