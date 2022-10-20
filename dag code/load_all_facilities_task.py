@@ -37,9 +37,9 @@ def build_load_all_facilities_task(dag: DAG) -> SparkSubmitOperator:
                                               driver_memory='1g',
                                               name='load_facilities',
                                               conf={
-                                                # "spark.openlineage.namespace": spark_openlineage_namespace,                                                
-                                                # "spark.openlineage.host": spark_openlineage_host,
-                                                # "spark.extraListeners": spark_extra_listeners, 
+                                                "spark.openlineage.namespace": spark_openlineage_namespace,                                                
+                                                "spark.openlineage.host": spark_openlineage_host,
+                                                "spark.extraListeners": spark_extra_listeners, 
                                                 "spark.driver.port":spark_driver_port,
                                                 "spark.driver.blockManager.port":spark_driver_block_manager_port,
                                                 "spark.driver.host": spark_driver_host,
