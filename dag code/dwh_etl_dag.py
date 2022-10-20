@@ -1,6 +1,4 @@
 from datetime import datetime, timedelta
-import imp
-from statistics import variance
 import pendulum
 from airflow import DAG
 from includes.load_all_facilities_task import build_load_all_facilities_task
@@ -31,11 +29,12 @@ dag = DAG(dag_id='dwh_etl_dag',
 
 load_facilities = build_load_all_facilities_task(dag = dag)
 load_art_patients = build_load_art_patients_task(dag = dag)
-load_ct_patients = build_load_ct_patient_visits_task(dag = dag)
+load_ct_patient_visits = build_load_ct_patient_visits_task(dag = dag)
 load_adverse_events = build_load_adverse_events_task(dag = dag)
 load_patient_labs = build_load_patient_labs_task(dag = dag)
 load_ct_patient_status = build_load_ct_patient_status_task(dag = dag)
 load_ct_patients = build_load_ct_patients_task(dag = dag)
 load_patient_pharmacy = build_load_patient_pharmacy_task(dag = dag)
 
-load_facilities >> load_ct_patients >>load_art_patients >> load_ct_patients >> load_adverse_events >> load_patient_labs >> load_ct_patient_status >> load_patient_pharmacy 
+load_facilities >> load_ct_patients >> load_art_patients >> load_adverse_events >> load_patient_labs
+load_patient_labs >> load_ct_patient_status >> load_patient_pharmacy >> load_ct_patient_visits
