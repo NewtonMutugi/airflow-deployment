@@ -31,7 +31,7 @@ def build_load_all_facilities_task(dag: DAG, default_conf) -> SparkSubmitOperato
         "spark.sink.user": lf_spark_sink_user,
         "spark.sink.password": lf_spark_sink_password,
         "spark.sink.dbtable": lf_spark_sink_dbtable,
-        "spark.sink.numpartitions": lf_spark_sink_numpartitions,
+        "spark.sink.numpartitions": lf_spark_sink_numpartitions
     }
     custom_default_conf = default_conf.copy()
     custom_default_conf.update(task_conf)
