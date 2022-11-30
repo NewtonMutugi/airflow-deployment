@@ -75,9 +75,12 @@ services:
     <<: *airflow-common
     command: celery worker
     ports:
-      - "4040:4040"
-      - "5050:5050"
-      - "5060:5060"       
+      - "4040:4040"                       
+      - "4041:4041"      
+      - "5050:5050" 
+      - "5051:5051"       
+      - "5060:5060"                       
+      - "5061:5061"
     healthcheck:
       test:
         - "CMD-SHELL"
