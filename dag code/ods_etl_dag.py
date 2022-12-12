@@ -52,6 +52,13 @@ spark_ods_driver = Variable.get("SPARK_ODS_DRIVER")
 spark_ods_user = Variable.get("SPARK_ODS_USER")
 spark_ods_password = Variable.get("SPARK_ODS_PASSWORD")
 
+spark_ods_lookup_marital_status = Variable.get("SPARK_ODS_LOOKUP_MARITAL_STATUS")
+spark_ods_lookup_education_level = Variable.get("SPARK_ODS_LOOKUP_EDUCATION_LEVEL")
+spark_ods_lookup_regimen_map = Variable.get("SPARK_ODS_LOOKUP_REGIMEN_MAP")
+spark_ods_lookup_patient_source = Variable.get("SPARK_ODS_LOOKUP_PATIENT_SOURCE")
+spark_ods_lookup_partner_offering_ovc = Variable.get("SPARK_ODS_LOOKUP_PARTNER_OFFERING_OVC")
+
+
 default_conf = {
     "connection_id": "spark_standalone",
     "spark_app_home":spark_app_home,
@@ -63,6 +70,11 @@ default_conf = {
     "spark.driver.blockManager.port": spark_driver_block_manager_port,   
     "spark.driver.host": spark_driver_host,
     "spark.driver.bindAddress": spark_driver_bind_address,
+    "spark.lookup.maritalStatus":spark_ods_lookup_marital_status,
+    "spark.lookup.educationLevel": spark_ods_lookup_education_level,
+    "spark.lookup.regimenMap": spark_ods_lookup_regimen_map,
+    "spark.lookup.patientSource": spark_ods_lookup_patient_source,
+    "spark.lookup.partnerOfferingOvc": spark_ods_lookup_partner_offering_ovc,
     "spark.source.database-name": dc_spark_source_database_name,
     "spark.source.database-host": dc_spark_source_database_host,
     "spark.source.url": spark_dwapicentral_url,
@@ -75,7 +87,9 @@ default_conf = {
     "spark.sink.user": spark_ods_user,
     "spark.sink.password": spark_ods_password,
     "spark.sink.numpartitions": dc_spark_sink_numpartitions,
-    "spark.sql.autoBroadcastJoinThreshold":-1
+    "spark.sql.autoBroadcastJoinThreshold":-1,
+    "spark.network.timeout": "100000001",
+    "spark.executor.heartbeatInterval": "10000000"
 }
 
 default_args = {
