@@ -12,7 +12,7 @@ There are two deployment options (local & production). The local directory has a
 
 ```bash
 cd dockerfiles
-docker builed -t khmis/airflow:0.0.1 .
+docker build -t khmis/airflow:0.0.1 .
 ```
 2. You can define environment varibles using the `.env` file which can be found in both the local and production directories.
 
