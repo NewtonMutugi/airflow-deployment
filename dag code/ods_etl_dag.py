@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 from airflow.models import Variable
 import pendulum
 from airflow import DAG
+from airflow.operators.trigger_dagrun import TriggerDagRunOperator
 from includes.load_all_facilities_task import build_load_all_facilities_task
 from includes.load_art_patients_task import build_load_art_patients_task
 from includes.load_ct_patient_visits_task import build_load_ct_patient_visits_task
@@ -22,8 +23,8 @@ from includes.load_ct_drug_alcohol_screening_task import build_load_drug_alcohol
 from includes.load_ct_patients_wabwhocd4_task import build_load_patient_wab_who_cd4_task
 from includes.load_enhanced_adherence_counselling_task import build_load_enhanced_adherence_counselling_task
 from includes.load_ct_depression_screening import build_load_depression_screening_task
+from includes.load_historical_art_outcome_task import build_load_historical_art_outcome_task
 from includes.start_ods_etl_task import build_send_ods_etl_start_email_task
-from includes.end_ods_etl_task import build_send_ods_etl_end_email_task
 
 
 local_tz = pendulum.timezone("Africa/Nairobi")
@@ -108,7 +109,6 @@ dag = DAG(dag_id='ods_etl_dag',
           schedule_interval="0 12 15 * *")
 
 send_ods_etl_start_email = build_send_ods_etl_start_email_task(dag=dag)
-send_ods_etl_end_email = build_send_ods_etl_end_email_task(dag=dag)
 load_facilities = build_load_all_facilities_task(dag=dag, default_conf = default_conf)
 load_art_patients = build_load_art_patients_task(dag=dag, default_conf = default_conf)
 load_ct_allergies = build_load_ct_allergies_task(dag=dag, default_conf = default_conf)
@@ -128,12 +128,18 @@ load_ct_ipt = build_load_ct_ipt_task(dag=dag, default_conf = default_conf)
 load_drug_alcohol_screening = build_load_drug_alcohol_screening_task(dag=dag, default_conf = default_conf)
 load_patient_wab_who_cd4 = build_load_patient_wab_who_cd4_task(dag=dag, default_conf = default_conf)
 load_depression_screening = build_load_depression_screening_task(dag=dag, default_conf = default_conf)
+load_historical_art_outcome = build_load_historical_art_outcome_task(dag=dag, default_conf = default_conf)
 load_enhanced_adherence_counselling = build_load_enhanced_adherence_counselling_task(
     dag=dag, default_conf = default_conf)
 
+intermediate_tables_trigger = TriggerDagRunOperator(
+    task_id="trigger_intermediate_tables_etl",
+    trigger_dag_id = "it_etl_dag",
+    dag=dag
+)
 
 send_ods_etl_start_email >> load_ct_patient_visits>> load_ct_ipt >> load_facilities >>load_patient_labs>> load_ct_patient_status
 load_ct_patient_status >> load_ct_patients >> load_art_patients >> load_patient_pharmacy >> load_adverse_events
 load_adverse_events >> load_drug_alcohol_screening >> load_depression_screening >> load_patient_wab_who_cd4 >> load_enhanced_adherence_counselling
 load_enhanced_adherence_counselling >> load_ct_allergies >> load_ct_contact_listing >> load_ct_covid >> load_ct_defaulter_tracing
-load_ct_defaulter_tracing >> load_ct_gbv_screening >> load_ct_otz >> load_ct_ovc >> send_ods_etl_end_email
+load_ct_defaulter_tracing >> load_ct_gbv_screening >> load_ct_otz >> load_ct_ovc >> load_historical_art_outcome >> intermediate_tables_trigger

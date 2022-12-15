@@ -15,6 +15,8 @@ from includes.load_fact_ovc_task import build_ovc_fact
 from includes.load_fact_latest_obs_task import build_latest_obs_fact
 from includes.load_fact_covid_task import build_covid_fact
 from includes.load_fact_art_task import build_art_fact
+from includes.end_ods_etl_task import build_send_ods_etl_end_email_task
+
 
 local_tz = pendulum.timezone("Africa/Nairobi")
 
@@ -136,9 +138,9 @@ otz_fact = build_otz_fact(dag = dag, default_conf = default_conf)
 ovc_fact = build_ovc_fact(dag = dag, default_conf = default_conf)
 latest_obs = build_latest_obs_fact(dag = dag, default_conf = default_conf)
 covid_fact = build_covid_fact(dag = dag, default_conf = default_conf)
-
+send_etl_end_email = build_send_ods_etl_end_email_task(dag=dag)
 
 load_date_dimension >> drug_dimension >> relation_to_patient_dimension >> age_group_dimension
 age_group_dimension >> regimen_line_dimension >> differentiated_care_dimension >> load_dimensions >> art_history
-art_history >> art_fact >> otz_fact >> ovc_fact >> latest_obs >> covid_fact
+art_history >> art_fact >> otz_fact >> ovc_fact >> latest_obs >> covid_fact >> send_etl_end_email
 # art_history >> otz_fact >> ovc_fact >> latest_obs >> covid_fact
