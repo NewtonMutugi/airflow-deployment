@@ -56,6 +56,10 @@ default_conf = {
     "spark.ods.driver": spark_ods_driver,
     "spark.ods.user": spark_ods_user,
     "spark.ods.password": spark_ods_password,
+    "spark.sink.url": spark_ods_url,
+    "spark.sink.driver": spark_ods_driver,
+    "spark.sink.user": spark_ods_user,
+    "spark.sink.password": spark_ods_password,
     "spark.intermediateQuery.timeout": spark_intermediate_query_timeout,
     "spark.sql.autoBroadcastJoinThreshold":-1
 }
