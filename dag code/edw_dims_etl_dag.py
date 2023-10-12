@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from airflow.operators.trigger_dagrun import TriggerDagRunOperator
 from airflow.models import Variable
 import pendulum
 from airflow import DAG
@@ -126,23 +127,30 @@ dag = DAG(dag_id='edw_dims_etl_dag',
           catchup=False,
           schedule_interval=None)
 
-load_dim_age_group = build_age_group_dimension(dag = dag, default_conf = default_conf)
-load_dim_agency = build_load_dim_agency(dag = dag, default_conf = default_conf)
-load_dim_date = build_load_date_dimension(dag = dag, default_conf = default_conf)
+# load_dim_art_outcome = build_load_dim_art_outcome(dag = dag, default_conf = default_conf)
+# load_dim_age_group = build_age_group_dimension(dag = dag, default_conf = default_conf)
+# load_dim_agency = build_load_dim_agency(dag = dag, default_conf = default_conf)
+# load_dim_date = build_load_date_dimension(dag = dag, default_conf = default_conf)
 load_dim_differentiated_care = build_differentiated_care_dimension(dag = dag, default_conf = default_conf)
-load_drug_dimension = build_drug_dimension(dag = dag, default_conf = default_conf)
-load_dim_facilities = build_load_dim_facilities(dag = dag, default_conf = default_conf)
-load_dim_hts_trace_outcome = build_load_dim_hts_trace_outcome(dag = dag, default_conf = default_conf)
-load_dim_hts_trace_type = build_load_dim_hts_trace_type(dag = dag, default_conf = default_conf)
-load_dim_partners = build_load_dim_partners(dag = dag, default_conf = default_conf)
-load_dim_patients = build_load_dim_patients(dag = dag, default_conf = default_conf)
-load_dim_regimen_line = build_regimen_line_dimension(dag = dag, default_conf = default_conf)
-load_dim_relation_to_patient = build_relation_to_patient_dimension(dag = dag, default_conf = default_conf)
-load_dim_test_kit_name = build_load_dim_test_kit_name(dag = dag, default_conf = default_conf)
-load_dim_treatment_type = build_load_dim_treatment_type(dag = dag, default_conf = default_conf)
+# load_drug_dimension = build_drug_dimension(dag = dag, default_conf = default_conf)
+# load_dim_facilities = build_load_dim_facilities(dag = dag, default_conf = default_conf)
+# load_dim_hts_trace_outcome = build_load_dim_hts_trace_outcome(dag = dag, default_conf = default_conf)
+# load_dim_hts_trace_type = build_load_dim_hts_trace_type(dag = dag, default_conf = default_conf)
+# load_dim_partners = build_load_dim_partners(dag = dag, default_conf = default_conf)
+# load_dim_patients = build_load_dim_patients(dag = dag, default_conf = default_conf)
+# load_dim_regimen_line = build_regimen_line_dimension(dag = dag, default_conf = default_conf)
+# load_dim_relation_to_patient = build_relation_to_patient_dimension(dag = dag, default_conf = default_conf)
+# load_dim_test_kit_name = build_load_dim_test_kit_name(dag = dag, default_conf = default_conf)
+# load_dim_treatment_type = build_load_dim_treatment_type(dag = dag, default_conf = default_conf)
 
-load_dim_age_group >> load_dim_agency >> load_dim_date >> load_dim_differentiated_care
-load_dim_differentiated_care >> load_drug_dimension >> load_dim_facilities >> load_dim_hts_trace_outcome
-load_dim_hts_trace_outcome >> load_dim_hts_trace_type >> load_dim_partners >> load_dim_patients
-load_dim_patients >> load_dim_regimen_line >> load_dim_relation_to_patient >> load_dim_test_kit_name
-load_dim_test_kit_name >>  load_dim_treatment_type
+# edw_facts_etl_trigger = TriggerDagRunOperator(
+#     task_id="trigger_edw_facts_etl",
+#     trigger_dag_id = "edw_facts_etl_dag",
+#     dag=dag
+# )
+
+# load_dim_age_group >> load_dim_art_outcome >> load_dim_agency >> load_dim_date >> load_dim_differentiated_care
+# load_dim_differentiated_care >> load_drug_dimension >> load_dim_facilities >> load_dim_hts_trace_outcome
+# load_dim_hts_trace_outcome >> load_dim_hts_trace_type >> load_dim_partners >> load_dim_patients
+# load_dim_patients >> load_dim_regimen_line >> load_dim_relation_to_patient >> load_dim_test_kit_name
+# load_dim_test_kit_name >>  load_dim_treatment_type >> edw_facts_etl_trigger

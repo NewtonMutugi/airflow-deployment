@@ -3,7 +3,6 @@ from airflow.models import Variable
 import pendulum
 from airflow import DAG
 from airflow.operators.trigger_dagrun import TriggerDagRunOperator
-
 from includes.load_mnch_anc_visits_task import build_load_mnch_anc_visits
 from includes.load_mnch_arts_task import build_load_mnch_arts
 from includes.load_mnch_cwc_enrolments_task import build_load_mnch_cwc_enrolments

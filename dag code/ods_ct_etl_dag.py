@@ -82,16 +82,11 @@ default_conf = {
     "spark.lookup.partnerOfferingOvc": spark_ods_lookup_partner_offering_ovc,
     "spark.source.database-name": dc_spark_source_database_name,
     "spark.source.database-host": dc_spark_source_database_host,
-    "spark.source.url": spark_dwapicentral_url,
-    "spark.source.driver": spark_dwapicentral_driver,
-    "spark.source.user": spark_dwapicentral_user,
-    "spark.source.password": spark_dwapicentral_password,
     "spark.source.numpartitions": dc_spark_source_numpartitions,
     "spark.sink.url": spark_ods_url,
     "spark.sink.driver": spark_ods_driver,
     "spark.sink.user": spark_ods_user,
     "spark.sink.password": spark_ods_password,
-    "spark.sink.numpartitions": dc_spark_sink_numpartitions,
     "spark.ods.url": spark_ods_url,
     "spark.ods.driver": spark_ods_driver,
     "spark.ods.user": spark_ods_user,
@@ -148,7 +143,6 @@ load_ct_ipt = build_load_ct_ipt_task(dag=dag, default_conf = default_conf)
 load_drug_alcohol_screening = build_load_drug_alcohol_screening_task(dag=dag, default_conf = default_conf)
 load_patient_baselines = build_load_patient_baselines_task(dag=dag, default_conf = default_conf)
 load_depression_screening = build_load_depression_screening_task(dag=dag, default_conf = default_conf)
-# load_historical_art_outcome = build_load_historical_art_outcome_task(dag=dag, default_conf = default_conf)
 load_enhanced_adherence_counselling = build_load_enhanced_adherence_counselling_task(
     dag=dag, default_conf = default_conf)
 
@@ -163,4 +157,3 @@ load_ct_patient_status >> load_ct_patients >> load_art_patients >> load_patient_
 load_adverse_events >> load_drug_alcohol_screening >> load_depression_screening >> load_patient_baselines >> load_enhanced_adherence_counselling
 load_enhanced_adherence_counselling >> load_ct_allergies >> load_ct_contact_listing >> load_ct_covid >> load_ct_defaulter_tracing
 load_ct_defaulter_tracing >> load_ct_gbv_screening >> load_ct_otz >> load_ct_ovc >> ods_hts_etl_trigger
-# >> load_historical_art_outcome

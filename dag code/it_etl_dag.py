@@ -18,6 +18,10 @@ from includes.load_intermediate_pregnancy_as_at_task import build_load_pregnancy
 from includes.load_intermediate_pregnancy_during_art_task import build_load_pregnancy_during_art_task
 from includes.load_intermediate_latest_weight_height_task import build_load_intermediate_latest_weight_height_task
 from includes.load_intermediate_pharmacy_dispense_as_at_task import build_load_pharmacy_dispense_as_at_task
+from includes.load_intermediate_encounter_hts_tests_task import build_load_intermediate_encounter_hts_tests_task
+from includes.load_intermediate_prep_last_visit_task import build_load_intermediate_prep_last_visit_task
+from includes.load_intermediate_latest_prep_assessment_task import build_load_intermediate_prep_assessment_task
+from includes.load_intermediate_prep_refills_task import build_load_intermediate_prep_refills_task
 
 
 local_tz = pendulum.timezone("Africa/Nairobi")
@@ -94,18 +98,22 @@ load_pregnancy_as_at = build_load_pregnancy_as_at_task(dag = dag, default_conf =
 load_pregnancy_during_art = build_load_pregnancy_during_art_task(dag = dag, default_conf = default_conf)
 intermediate_latest_weight_height = build_load_intermediate_latest_weight_height_task(dag = dag, default_conf = default_conf)
 load_pharmacy_dispense_as_at = build_load_pharmacy_dispense_as_at_task(dag = dag, default_conf = default_conf)
-
+load_intermediate_encounter_hts_tests = build_load_intermediate_encounter_hts_tests_task(dag = dag, default_conf = default_conf)
+load_intermediate_prep_assessment = build_load_intermediate_prep_assessment_task(dag = dag, default_conf = default_conf)
+load_intermediate_prep_last_visit = build_load_intermediate_prep_last_visit_task(dag = dag, default_conf = default_conf)
+load_intermediate_prep_refills = build_load_intermediate_prep_refills_task(dag = dag, default_conf = default_conf)
 
 edw_etl_trigger = TriggerDagRunOperator(
     task_id="trigger_edw_etl",
-    trigger_dag_id = "edw_etl_dag",
+    trigger_dag_id = "edw_dims_etl_dag",
     dag=dag
 )
-
 intermediate_latest_visit_as_at  >> baseline_viral_loads >> intermediate_last_otz >> intermediate_last_ovc >> intermediate_last_pharmacy_dispense_date
 intermediate_last_pharmacy_dispense_date >> load_pharmacy_dispense_as_at >> intermediate_last_visit >> intermediate_last_patient_encounter_as_at >> intermediate_last_patient_encounter
 intermediate_last_patient_encounter >> intermediate_art_outcomes >> intermediate_latest_viral_loads 
 intermediate_latest_viral_loads >> intermediate_latest_weight_height >>  intermediate_ordered_viral_loads  
-intermediate_ordered_viral_loads >> load_pregnancy_as_at >> load_pregnancy_during_art >> edw_etl_trigger
+intermediate_ordered_viral_loads >> load_pregnancy_as_at >> load_pregnancy_during_art >> load_intermediate_encounter_hts_tests
+load_intermediate_encounter_hts_tests >> load_intermediate_prep_assessment
+load_intermediate_prep_assessment >> load_intermediate_prep_last_visit >> load_intermediate_prep_refills >> edw_etl_trigger
 
 

@@ -3,7 +3,6 @@ from airflow.models import Variable
 import pendulum
 from airflow import DAG
 from airflow.operators.trigger_dagrun import TriggerDagRunOperator
-
 from includes.load_prep_adverse_events_task import build_load_prep_adverse_events
 from includes.load_prep_behaviour_risk_task import build_load_prep_behaviour_risk
 from includes.load_prep_care_termination_task import build_load_prep_care_termination
@@ -79,6 +78,12 @@ dag = DAG(dag_id='ods_prep_etl_dag',
           schedule_interval=None,
           )
 
+it_etl_trigger = TriggerDagRunOperator(
+    task_id="it_etl_trigger",
+    trigger_dag_id = "it_etl_dag",
+    dag=dag
+)
+
 load_prep_adverse_events = build_load_prep_adverse_events(dag=dag, default_conf = default_conf)
 load_prep_behaviour_risk = build_load_prep_behaviour_risk(dag=dag, default_conf = default_conf)
 load_prep_care_termination = build_load_prep_care_termination(dag=dag, default_conf = default_conf)
@@ -88,5 +93,5 @@ load_prep_pharmacy = build_load_prep_pharmacy(dag=dag, default_conf = default_co
 load_prep_visits = build_load_prep_visits(dag=dag, default_conf = default_conf)
 
 load_prep_adverse_events >> load_prep_behaviour_risk >> load_prep_care_termination >> load_prep_lab 
-load_prep_lab >> load_prep_patient >> load_prep_pharmacy >> load_prep_visits
+load_prep_lab >> load_prep_patient >> load_prep_pharmacy >> load_prep_visits >> it_etl_trigger
 

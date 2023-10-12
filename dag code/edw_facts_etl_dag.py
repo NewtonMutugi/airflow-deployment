@@ -71,6 +71,7 @@ default_conf = {
     "default_spark_executor_cores": default_spark_executor_cores,
     "default_spark_executor_memory": default_spark_executor_memory,
     "default_spark_driver_memory": default_spark_driver_memory,
+    "spark.default.numpartitions":spark_default_numpartitions,
     "spark.driver.port": spark_driver_port,
     "spark.driver.blockManager.port": spark_driver_block_manager_port,
     "spark.driver.host": spark_driver_host,
