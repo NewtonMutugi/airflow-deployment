@@ -12,8 +12,6 @@ from includes.load_hts_partner_notification_services_task import build_load_hts_
 from includes.load_hts_partner_tracing_task import build_load_hts_partner_tracing
 from includes.load_hts_test_kits_task import build_load_hts_test_kits
 
-from includes.start_ods_etl_task import build_send_ods_etl_start_email_task
-
 local_tz = pendulum.timezone("Africa/Nairobi")
 
 spark_app_home = Variable.get("SPARK_APP_HOME")
