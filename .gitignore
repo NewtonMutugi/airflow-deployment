@@ -8,9 +8,5 @@
 /production/*.json
 
 ## Locally generated files
-production/dags/
-local/dags/
 */logs/
-production/plugins/
-local/plugins/
 */sparkapps/
