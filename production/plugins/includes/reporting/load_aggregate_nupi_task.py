@@ -7,7 +7,7 @@ def build_load_aggregate_nupi_task(dag: DAG):
     load_aggregate_nupi_task = MsSqlOperator(task_id='load_aggregate_nupi_task',
                                               mssql_conn_id='reporting',
                                               execution_timeout=timedelta(minutes=600),
-                                              sql='sql/reporting/load_aggregateNupi.sql',
+                                              sql='sql/reporting/Load_AggregateNupi.sql',
                                               dag=dag
                                               )
     return load_aggregate_nupi_task
