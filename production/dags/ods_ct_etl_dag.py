@@ -146,7 +146,7 @@ load_patient_baselines = build_load_patient_baselines_task(dag=dag, default_conf
 load_depression_screening = build_load_depression_screening_task(dag=dag, default_conf = default_conf)
 load_enhanced_adherence_counselling = build_load_enhanced_adherence_counselling_task(
     dag=dag, default_conf = default_conf)
-load_cervical_screening = build_load_ct_cervical_screening_task(dag=dag, default_conf = default_conf)
+# load_cervical_screening = build_load_ct_cervical_screening_task(dag=dag, default_conf = default_conf)
 
 ods_hts_etl_trigger = TriggerDagRunOperator(
     task_id="trigger_ods_hts_etl",
@@ -158,4 +158,4 @@ send_ods_etl_start_email >> load_facilities >> load_ct_patient_visits>> load_ct_
 load_ct_patient_status >> load_ct_patients >> load_art_patients >> load_patient_pharmacy >> load_adverse_events
 load_adverse_events >> load_drug_alcohol_screening >> load_depression_screening >> load_patient_baselines >> load_enhanced_adherence_counselling
 load_enhanced_adherence_counselling >> load_ct_allergies >> load_ct_contact_listing >> load_ct_covid >> load_ct_defaulter_tracing
-load_ct_defaulter_tracing >> load_ct_gbv_screening >> load_ct_otz >> load_ct_ovc >> load_cervical_screening >> ods_hts_etl_trigger
+load_ct_defaulter_tracing >> load_ct_gbv_screening >> load_ct_otz >> load_ct_ovc >> ods_hts_etl_trigger
