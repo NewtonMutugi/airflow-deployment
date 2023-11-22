@@ -55,7 +55,7 @@ load_linelist_viralload = build_load_linelist_viralload_task(dag = dag)
 load_linelist_vl_non_suppressed = build_load_linelist_vl_non_suppressed_task(dag = dag)
 reporting_aggregates_etl_trigger = TriggerDagRunOperator(
     task_id="trigger_reporting_aggregates_etl",
-    trigger_dag_id = "reporting_aggregates_tables_etl_dag",
+    trigger_dag_id = "reporting_aggregate_tables_etl_dag",
     dag=dag
 )
 
