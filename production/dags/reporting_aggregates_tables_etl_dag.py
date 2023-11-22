@@ -63,10 +63,11 @@ default_args = {
     'retry_delay': timedelta(minutes=5)
 }
 
-dag = DAG(dag_id='reporting_tables_etl_dag',
+dag = DAG(dag_id='reporting_aggregate_tables_etl_dag',
           schedule_interval=None,
           default_args=default_args,
           )
+
 
 load_aggregate_adverse_events = build_load_aggregate_adverse_events_task(dag = dag)
 load_aggregate_appointment = build_load_aggregate_appointment_task(dag = dag)

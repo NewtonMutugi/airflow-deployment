@@ -1,6 +1,7 @@
 from airflow import DAG
 import pendulum
 from datetime import datetime, timedelta
+from airflow.operators.trigger_dagrun import TriggerDagRunOperator
 from includes.reporting.load_all_emr_sites_task import build_load_all_emr_sites_task
 from includes.reporting.load_linelist_adverse_events_task import build_load_linelist_adverse_events_task
 from includes.reporting.load_linelist_appointments_task import build_load_linelist_appointments_task
@@ -52,6 +53,11 @@ load_linelist_trans_hts = build_load_linelist_trans_hts_task(dag = dag)
 load_linelist_trans_pns = build_load_linelist_trans_pns_task(dag = dag)
 load_linelist_viralload = build_load_linelist_viralload_task(dag = dag)
 load_linelist_vl_non_suppressed = build_load_linelist_vl_non_suppressed_task(dag = dag)
+reporting_aggregates_etl_trigger = TriggerDagRunOperator(
+    task_id="trigger_reporting_aggregates_etl",
+    trigger_dag_id = "reporting_aggregates_tables_etl_dag",
+    dag=dag
+)
 
 
-load_linelist_FACTART >> load_linelist_FACTART_Palantir >> load_linelist_vl_non_suppressed >> load_all_emr_sites  >> load_linelist_adverse_events >> load_linelist_appointments >> load_linelist_covid  >> load_linelist_hts_risk_categorization_and_test_results >> load_linelist_hts_risk_categorization_and_test_results >> load_linelist_otz_eligibility_and_enrollments >> load_linelist_otz >> load_linelist_ovc_eligibility_and_enrollment >> load_linelist_ovc_enrollment >> load_linelist_Prep >> load_linelist_trans_hts >> load_linelist_trans_pns >> load_linelist_viralload >> load_linelist_vl_non_suppressed
+load_linelist_FACTART >> load_linelist_FACTART_Palantir >> load_linelist_vl_non_suppressed >> load_all_emr_sites  >> load_linelist_adverse_events >> load_linelist_appointments >> load_linelist_covid  >> load_linelist_hts_risk_categorization_and_test_results >> load_linelist_otz_eligibility_and_enrollments >> load_linelist_otz >> load_linelist_ovc_eligibility_and_enrollment >> load_linelist_ovc_enrollment >> load_linelist_Prep >> load_linelist_trans_hts >> load_linelist_trans_pns >> load_linelist_viralload >> reporting_aggregates_etl_trigger
