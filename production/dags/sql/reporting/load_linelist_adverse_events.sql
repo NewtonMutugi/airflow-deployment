@@ -2,7 +2,7 @@ IF OBJECT_ID(N'[REPORTING].[dbo].LineListAdverseEvents', N'U') IS NOT NULL
 	drop TABLE [REPORTING].[dbo].LineListAdverseEvents;
 
 with AdverseEvents as (
- SELECT
+SELECT
             MFLCode,
             PatientIDHash,
             PatientPKHash,
@@ -34,6 +34,5 @@ with AdverseEvents as (
 
 SELECT
    *
- INTO [REPORTING].[dbo].LineListAdverseEvents
+INTO [REPORTING].[dbo].LineListAdverseEvents
 FROM AdverseEvents
-GO

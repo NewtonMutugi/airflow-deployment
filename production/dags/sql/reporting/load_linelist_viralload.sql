@@ -18,8 +18,8 @@ SELECT DISTINCT
 	vl.LatestVLDate2Key,
 	LatestVL3,
 	vl.LatestVLDate3Key,
-	PBFValidVL,
-    CAST(GETDATE() AS DATE) AS LoadDate 
+	PBFW_ValidVL,
+	CAST(GETDATE() AS DATE) AS LoadDate
 INTO REPORTING.dbo.LineListViralLoad
 FROM NDWH.dbo.FactViralLoads vl
 INNER join NDWH.dbo.DimAgeGroup age on age.AgeGroupKey=vl.AgeGroupKey
