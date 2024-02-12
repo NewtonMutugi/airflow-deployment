@@ -20,6 +20,7 @@ from includes.reporting.load_linelist_vl_non_suppressed_task import build_load_l
 from includes.reporting.load_linelist_pbfw_task import build_load_linelist_pbfw_task
 from includes.reporting.load_linelist_iit_risk_scores_task import build_load_linelist_iit_risk_scores_task
 from includes.reporting.load_linelist_heis_task import build_load_linelist_heis_task
+from includes.reporting.load_linelist_hts_eligibility_task import build_load_linelist_hts_eligibility_task
 
 
 local_tz = pendulum.timezone("Africa/Nairobi")
@@ -57,6 +58,8 @@ load_linelist_heis = build_load_linelist_heis_task(dag = dag)
 load_linelist_iit_risk_scores = build_load_linelist_iit_risk_scores_task(dag = dag)
 load_linelist_PBFW = build_load_linelist_pbfw_task(dag = dag)
 load_linelist_vl_non_suppressed = build_load_linelist_vl_non_suppressed_task(dag = dag)
+load_linelist_hts_eligibility = build_load_linelist_hts_eligibility_task(dag = dag)
+
 reporting_aggregates_etl_trigger = TriggerDagRunOperator(
     task_id="trigger_reporting_aggregates_etl",
     trigger_dag_id = "reporting_aggregate_tables_etl_dag",
@@ -64,4 +67,4 @@ reporting_aggregates_etl_trigger = TriggerDagRunOperator(
 )
 
 
-load_linelist_FACTART >> load_linelist_vl_non_suppressed >> load_all_emr_sites  >> load_linelist_adverse_events >> load_linelist_appointments >> load_linelist_covid  >> load_linelist_hts_risk_categorization_and_test_results >> load_linelist_otz_eligibility_and_enrollments >> load_linelist_otz >> load_linelist_ovc_eligibility_and_enrollment >> load_linelist_ovc_enrollment >> load_linelist_Prep >> load_linelist_trans_hts >> load_linelist_trans_pns >> load_linelist_viralload >> reporting_aggregates_etl_trigger >> load_linelist_PBFW >> load_linelist_iit_risk_scores >> load_linelist_heis
+load_linelist_FACTART >> load_linelist_vl_non_suppressed >> load_all_emr_sites  >> load_linelist_adverse_events >> load_linelist_appointments >> load_linelist_covid  >> load_linelist_hts_risk_categorization_and_test_results >> load_linelist_otz_eligibility_and_enrollments >> load_linelist_otz >> load_linelist_ovc_eligibility_and_enrollment >> load_linelist_ovc_enrollment >> load_linelist_Prep >> load_linelist_trans_hts >> load_linelist_trans_pns >> load_linelist_viralload >> reporting_aggregates_etl_trigger >> load_linelist_PBFW >> load_linelist_iit_risk_scores >> load_linelist_heis >> load_linelist_hts_eligibility
