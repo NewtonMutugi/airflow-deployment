@@ -15,8 +15,8 @@ SELECT
     SUM (case when Recieivedart=1 Then 1 Else 0 End ) As  PBFWOnART,
     SUM (Case When  Recieivedart=1  and EligibleVL=1 Then  1 Else 0 end) AS PBFWEligiblevl,
     SUM (CASE WHEN try_cast (PBFW_ValidVLResultCategory as float ) is not null Then 1   ELSE 0 END) AS PBFWValidVl,
-    SUM (Case When PBFW_ValidVLSup=1 Then 1 else 0 End) AS PBFWSuppressed,
-    SUM (Case When  PBFW_ValidVLSup=0 Then 1 Else 0 End ) AS PBFWUnsuppressed,
+    SUM (Case When HasValidVL=1 and PBFW_ValidVLSup=1 Then 1 else 0 End) AS PBFWSuppressed,
+    SUM (Case When HasValidVL=1 and PBFW_ValidVLSup=0 Then 1 Else 0 End ) AS PBFWUnsuppressed,
     Sum (Case When RepeatVls=1 Then 1 Else 0 End) As PBFWRepeatVl,
     Sum (Case When RepeatSuppressed=1 Then 1 Else 0 End) As PBFWRepeatVlSuppressed,
     Sum (Case When RepeatUnsuppressed=1 Then 1 Else 0 End) As PBFWRepeatVlUnSuppressed,
@@ -33,7 +33,7 @@ LEFT JOIN NDWH.dbo.DimAgency AS Agency ON Agency.AgencyKey = PBFW.AgencyKey
 LEFT JOIN NDWH.dbo.DimAgeGroup AS Age_group ON Age_group.AgeGroupKey = PBFW.AgeGroupKey
 LEFT JOIN NDWH.dbo.DimPatient AS Patient ON Patient.PatientKey = PBFW.PatientKey
 LEFT JOIN NDWH.dbo.FactViralLoads as Vls on Vls.patientkey=PBFW.patientkey
-GROUP BY 
+GROUP BY
     Facility.FacilityName,
     Facility.MFLCode,
     Facility.County,
@@ -42,4 +42,3 @@ GROUP BY
     Agency.AgencyName,
     Age_group.DATIMAgeGroup,
     Patient.Gender;
-
