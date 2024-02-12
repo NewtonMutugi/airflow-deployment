@@ -7,7 +7,6 @@ from includes.reporting.load_linelist_adverse_events_task import build_load_line
 from includes.reporting.load_linelist_appointments_task import build_load_linelist_appointments_task
 from includes.reporting.load_linelist_covid_task import build_load_linelist_covid_task
 from includes.reporting.load_linelist_FACTART_task import build_load_linelist_FACTART_task
-from includes.reporting.load_linelist_FACTART_Palantir_task import build_load_linelist_FACTART_Palantir_task
 from includes.reporting.load_linelist_hts_risk_categorization_and_test_results_task import build_load_linelist_hts_risk_categorization_and_test_results_task
 from includes.reporting.load_linelist_otz_eligibility_and_enrollments_task import build_load_linelist_otz_eligibility_and_enrollments_task
 from includes.reporting.load_linelist_otz_task import build_load_linelist_otz_task
@@ -45,7 +44,6 @@ load_linelist_adverse_events = build_load_linelist_adverse_events_task(dag = dag
 load_linelist_appointments = build_load_linelist_appointments_task(dag = dag)
 load_linelist_covid = build_load_linelist_covid_task(dag = dag)
 load_linelist_FACTART = build_load_linelist_FACTART_task(dag = dag)
-load_linelist_FACTART_Palantir = build_load_linelist_FACTART_Palantir_task(dag = dag)
 load_linelist_hts_risk_categorization_and_test_results = build_load_linelist_hts_risk_categorization_and_test_results_task(dag = dag)
 load_linelist_otz_eligibility_and_enrollments = build_load_linelist_otz_eligibility_and_enrollments_task(dag = dag)
 load_linelist_otz = build_load_linelist_otz_task(dag = dag)
@@ -66,4 +64,4 @@ reporting_aggregates_etl_trigger = TriggerDagRunOperator(
 )
 
 
-load_linelist_FACTART >> load_linelist_FACTART_Palantir >> load_linelist_vl_non_suppressed >> load_all_emr_sites  >> load_linelist_adverse_events >> load_linelist_appointments >> load_linelist_covid  >> load_linelist_hts_risk_categorization_and_test_results >> load_linelist_otz_eligibility_and_enrollments >> load_linelist_otz >> load_linelist_ovc_eligibility_and_enrollment >> load_linelist_ovc_enrollment >> load_linelist_Prep >> load_linelist_trans_hts >> load_linelist_trans_pns >> load_linelist_viralload >> reporting_aggregates_etl_trigger >> load_linelist_PBFW >> load_linelist_iit_risk_scores >> load_linelist_heis
+load_linelist_FACTART >> load_linelist_vl_non_suppressed >> load_all_emr_sites  >> load_linelist_adverse_events >> load_linelist_appointments >> load_linelist_covid  >> load_linelist_hts_risk_categorization_and_test_results >> load_linelist_otz_eligibility_and_enrollments >> load_linelist_otz >> load_linelist_ovc_eligibility_and_enrollment >> load_linelist_ovc_enrollment >> load_linelist_Prep >> load_linelist_trans_hts >> load_linelist_trans_pns >> load_linelist_viralload >> reporting_aggregates_etl_trigger >> load_linelist_PBFW >> load_linelist_iit_risk_scores >> load_linelist_heis
