@@ -70,7 +70,6 @@ With cte1 as (
         ELSE 0 End  Linked,
         d.ReportedCCCNumber,
         FacilityLinkedTo,
-        LinkedToCare,
         h.Date LinkDateLinkedToCare
     FROM  NDWH.dbo.FactHTSClientTests a
     INNER JOIN NDWH.dbo.FactHTSPartnerNotificationServices b on b.PatientKey=a.PatientKey and b.FacilityKey=a.FacilityKey
@@ -115,7 +114,6 @@ SELECT
     Linked,
     ReportedCCCNumber,
     FacilityLinkedTo,
-    LinkedToCare,
     LinkDateLinkedToCare,
     CAST(GETDATE() AS DATE) AS LoadDate 
     INTO REPORTING.dbo.LineListTransPNS
