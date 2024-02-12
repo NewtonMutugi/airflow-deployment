@@ -51,6 +51,7 @@ from includes.reporting.load_aggregate_tx_new_hts_cascade_task import build_load
 from includes.reporting.load_aggregate_vl_outcome_and_uptake_task import build_load_aggregate_vl_outcome_and_uptake_task
 from includes.reporting.load_aggregate_heis_task import build_load_aggregate_heis_task
 from includes.reporting.load_aggregate_PBFW_task import build_load_aggregate_PBFW_task
+from includes.reporting.load_aggregate_concordance_HTSPOS_task import build_load_aggregate_concordance_HTSPOS_task
 
 
 local_tz = pendulum.timezone("Africa/Nairobi")
@@ -120,10 +121,11 @@ load_aggregate_tx_new_hts_cascade = build_load_aggregate_tx_new_hts_cascade_task
 load_aggregate_vl_outcome_and_uptake = build_load_aggregate_vl_outcome_and_uptake_task(dag = dag)
 load_aggregate_heis = build_load_aggregate_heis_task(dag = dag)
 load_aggregate_PBFW = build_load_aggregate_PBFW_task(dag = dag)
+load_aggregate_concordance_HTSPOS = build_load_aggregate_concordance_HTSPOS_task(dag = dag)
 
 
 load_aggregate_adverse_events >> load_aggregate_appointment >> load_aggregate_art_history >> load_aggregate_tx_new >> load_aggregate_covid >> load_aggregate_dsd_appts_by_stability >> load_aggregate_dsd_stable >> load_aggregate_dsd >> load_aggregate_dsd_unstable >> load_aggregate_heis >> load_aggregate_PBFW >> load_aggregate_expecteduploads
 load_aggregate_expecteduploads >> load_aggregate_hts_client_self_tested >> load_aggregate_hts_client_tested_as >> load_aggregate_ct_dhis2 >> load_aggregate_defaulter_tracing_outcome >> load_aggregate_hts_dhis2 >> load_aggregate_hts_entrypoint >> load_aggregate_hts_months_last_test >>load_aggregate_hts_pns_knowledge_HIV_status >> load_aggregate_hts_pns_sexualpartner
 load_aggregate_hts_pns_sexualpartner >> load_aggregate_hts_pnschildren >> load_aggregate_hts_tbscreening >> load_aggregate_hts_teststrategy  >> load_aggregate_hts_uptake >> load_aggregate_iit_tracing_status >> load_aggregate_nupi >> load_aggregate_optimize_current_regimens  >> load_aggregate_optimize_start_regimens  >> load_aggregate_prep_cascade
-load_aggregate_prep_cascade >> load_aggregate_recencyuploads >> load_aggregate_time_to_art_grp  >> load_aggregate_time_to_art_last_12m >> load_aggregate_time_to_art  >> load_aggregate_time_to_first_vl_grp >> load_aggregate_time_to_vl_12m >> load_aggregate_otz  >> load_aggregate_TPT  >> load_aggregate_treatmentoutcomes >> load_aggregate_txcurr
+load_aggregate_prep_cascade >> load_aggregate_recencyuploads >> load_aggregate_time_to_art_grp  >> load_aggregate_time_to_art_last_12m >> load_aggregate_time_to_art  >> load_aggregate_time_to_first_vl_grp >> load_aggregate_time_to_vl_12m >> load_aggregate_otz  >> load_aggregate_TPT  >> load_aggregate_treatmentoutcomes >> load_aggregate_txcurr >> load_aggregate_concordance_HTSPOS
 load_aggregate_txcurr >> load_aggregate_tx_new_hts_cascade  >> load_aggregate_vl_outcome_and_uptake >> load_aggregate_otz_eligibility_and_enrollments >> load_aggregate_otz_outcome >> load_aggregate_ovc_count >> load_aggregate_prep_STIOutcomes >> load_aggregate_prep_discontinuations >> load_aggregate_prep_testing_at_1month_refill >> load_aggregate_prep_testing_at_3month_refill
