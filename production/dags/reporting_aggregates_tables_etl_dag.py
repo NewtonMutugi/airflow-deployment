@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from includes.reporting.load_aggregate_adverse_events_task import build_load_aggregate_adverse_events_task
 from includes.reporting.load_aggregate_appointment_task import build_load_aggregate_appointment_task
 from includes.reporting.load_aggregate_art_history_task import build_load_aggregate_art_history_task
-from includes.reporting.load_aggregate_cohort_retention_task import build_load_aggregate_cohort_retention_task
+from includes.reporting.load_aggregate_tx_new_task import build_load_aggregate_tx_new_task
 from includes.reporting.load_aggregate_covid_task import build_load_aggregate_covid_task
 from includes.reporting.load_aggregate_dsd_appts_by_stability_task import build_load_aggregate_dsd_appts_by_stability_task
 from includes.reporting.load_aggregate_dsd_stable_task import build_load_aggregate_dsd_stable_task
@@ -74,7 +74,7 @@ dag = DAG(dag_id='reporting_aggregate_tables_etl_dag',
 load_aggregate_adverse_events = build_load_aggregate_adverse_events_task(dag = dag)
 load_aggregate_appointment = build_load_aggregate_appointment_task(dag = dag)
 load_aggregate_art_history = build_load_aggregate_art_history_task(dag = dag)
-load_aggregate_cohort_retention = build_load_aggregate_cohort_retention_task(dag = dag)
+load_aggregate_tx_new = build_load_aggregate_tx_new_task(dag = dag)
 load_aggregate_covid = build_load_aggregate_covid_task(dag = dag)
 load_aggregate_dsd_appts_by_stability = build_load_aggregate_dsd_appts_by_stability_task(dag = dag)
 load_aggregate_dsd_stable = build_load_aggregate_dsd_stable_task(dag = dag)
@@ -122,7 +122,7 @@ load_aggregate_heis = build_load_aggregate_heis_task(dag = dag)
 load_aggregate_PBFW = build_load_aggregate_PBFW_task(dag = dag)
 
 
-load_aggregate_adverse_events >> load_aggregate_appointment >> load_aggregate_art_history >> load_aggregate_cohort_retention >> load_aggregate_covid >> load_aggregate_dsd_appts_by_stability >> load_aggregate_dsd_stable >> load_aggregate_dsd >> load_aggregate_dsd_unstable >> load_aggregate_heis >> load_aggregate_PBFW >> load_aggregate_expecteduploads
+load_aggregate_adverse_events >> load_aggregate_appointment >> load_aggregate_art_history >> load_aggregate_tx_new >> load_aggregate_covid >> load_aggregate_dsd_appts_by_stability >> load_aggregate_dsd_stable >> load_aggregate_dsd >> load_aggregate_dsd_unstable >> load_aggregate_heis >> load_aggregate_PBFW >> load_aggregate_expecteduploads
 load_aggregate_expecteduploads >> load_aggregate_hts_client_self_tested >> load_aggregate_hts_client_tested_as >> load_aggregate_ct_dhis2 >> load_aggregate_defaulter_tracing_outcome >> load_aggregate_hts_dhis2 >> load_aggregate_hts_entrypoint >> load_aggregate_hts_months_last_test >>load_aggregate_hts_pns_knowledge_HIV_status >> load_aggregate_hts_pns_sexualpartner
 load_aggregate_hts_pns_sexualpartner >> load_aggregate_hts_pnschildren >> load_aggregate_hts_tbscreening >> load_aggregate_hts_teststrategy  >> load_aggregate_hts_uptake >> load_aggregate_iit_tracing_status >> load_aggregate_nupi >> load_aggregate_optimize_current_regimens  >> load_aggregate_optimize_start_regimens  >> load_aggregate_prep_cascade
 load_aggregate_prep_cascade >> load_aggregate_recencyuploads >> load_aggregate_time_to_art_grp  >> load_aggregate_time_to_art_last_12m >> load_aggregate_time_to_art  >> load_aggregate_time_to_first_vl_grp >> load_aggregate_time_to_vl_12m >> load_aggregate_otz  >> load_aggregate_TPT  >> load_aggregate_treatmentoutcomes >> load_aggregate_txcurr
