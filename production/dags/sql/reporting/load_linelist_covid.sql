@@ -1,8 +1,8 @@
 IF OBJECT_ID(N'REPORTING.[dbo].[LineListCovid]', N'U') IS NOT NULL 		
-DROP TABLE REPORTING.[dbo].[LineListCovid];
+	DROP TABLE REPORTING.[dbo].[LineListCovid];
 
-SELECT 
-	DISTINCT pat.PatientPKHash
+SELECT
+	DISTINCT pat.PatientPKHash,
 	MFLCode,
 	f.FacilityName,
 	County,
@@ -43,8 +43,8 @@ SELECT
 	TracingFinalOutcome,
 	CauseOfDeath,
 	case when VaccinationStatus in ('Fully Vaccinated','Not Vaccinated','Partially Vaccinated') then 1 else 0 end as Screened,
-	CAST(GETDATE() AS DATE) AS LoadDate 
-INTO REPORTING.dbo.LineListCovid 
+	CAST(GETDATE() AS DATE) AS LoadDate
+INTO REPORTING.dbo.LineListCovid
 FROM NDWH.dbo.FactArt as art
 LEFT JOIN NDWH.dbo.FactCovid as cov on cov.PatientKey = art.PatientKey
 LEFT join NDWH.dbo.DimFacility f on f.FacilityKey = art.FacilityKey
