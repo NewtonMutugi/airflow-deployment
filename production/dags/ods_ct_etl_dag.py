@@ -23,6 +23,7 @@ from includes.load_ct_drug_alcohol_screening_task import build_load_drug_alcohol
 from includes.load_ct_patient_baselines_task import build_load_patient_baselines_task
 from includes.load_enhanced_adherence_counselling_task import build_load_enhanced_adherence_counselling_task
 from includes.load_ct_depression_screening import build_load_depression_screening_task
+from includes.load_ct_cancer_screening_task import build_load_ct_cancer_screening_task
 from includes.load_ct_cervical_cancer_screening_task import build_load_ct_cervical_screening_task
 from includes.load_historical_art_outcome_task import build_load_historical_art_outcome_task
 from includes.start_ods_etl_task import build_send_ods_etl_start_email_task
@@ -124,28 +125,29 @@ dag = DAG(dag_id='ods_ct_etl_dag',
         #   schedule_interval="0 12 15 * *"
           )
 
-send_ods_etl_start_email = build_send_ods_etl_start_email_task(dag=dag)
-load_facilities = build_load_all_facilities_task(dag=dag, default_conf = default_conf)
-load_art_patients = build_load_art_patients_task(dag=dag, default_conf = default_conf)
-load_ct_allergies = build_load_ct_allergies_task(dag=dag, default_conf = default_conf)
-load_ct_patient_visits = build_load_ct_patient_visits_task(dag=dag, default_conf = default_conf)
-load_adverse_events = build_load_adverse_events_task(dag=dag, default_conf= default_conf)
-load_ct_contact_listing = build_load_ct_contact_listing_task(dag=dag, default_conf = default_conf)
-load_ct_covid = build_load_ct_covid_task(dag=dag, default_conf = default_conf)
-load_ct_defaulter_tracing = build_load_ct_defaulter_tracing_task(dag=dag, default_conf = default_conf)
-load_ct_gbv_screening = build_load_ct_gbv_screening_task(dag=dag, default_conf = default_conf)
-load_ct_otz = build_load_ct_otz_task(dag=dag, default_conf = default_conf)
-load_ct_ovc = build_load_ct_ovc_task(dag=dag, default_conf = default_conf)
-load_patient_labs = build_load_patient_labs_task(dag=dag, default_conf = default_conf)
-load_ct_patient_status = build_load_ct_patient_status_task(dag=dag, default_conf = default_conf)
-load_ct_patients = build_load_ct_patients_task(dag=dag, default_conf = default_conf)
-load_patient_pharmacy = build_load_patient_pharmacy_task(dag=dag, default_conf = default_conf)
-load_ct_ipt = build_load_ct_ipt_task(dag=dag, default_conf = default_conf)
-load_drug_alcohol_screening = build_load_drug_alcohol_screening_task(dag=dag, default_conf = default_conf)
-load_patient_baselines = build_load_patient_baselines_task(dag=dag, default_conf = default_conf)
-load_depression_screening = build_load_depression_screening_task(dag=dag, default_conf = default_conf)
-load_enhanced_adherence_counselling = build_load_enhanced_adherence_counselling_task(
-    dag=dag, default_conf = default_conf)
+# send_ods_etl_start_email = build_send_ods_etl_start_email_task(dag=dag)
+# load_facilities = build_load_all_facilities_task(dag=dag, default_conf = default_conf)
+# load_art_patients = build_load_art_patients_task(dag=dag, default_conf = default_conf)
+# load_ct_allergies = build_load_ct_allergies_task(dag=dag, default_conf = default_conf)
+# load_ct_patient_visits = build_load_ct_patient_visits_task(dag=dag, default_conf = default_conf)
+# load_adverse_events = build_load_adverse_events_task(dag=dag, default_conf= default_conf)
+# load_ct_contact_listing = build_load_ct_contact_listing_task(dag=dag, default_conf = default_conf)
+# load_ct_covid = build_load_ct_covid_task(dag=dag, default_conf = default_conf)
+# load_ct_defaulter_tracing = build_load_ct_defaulter_tracing_task(dag=dag, default_conf = default_conf)
+# load_ct_gbv_screening = build_load_ct_gbv_screening_task(dag=dag, default_conf = default_conf)
+# load_ct_otz = build_load_ct_otz_task(dag=dag, default_conf = default_conf)
+# load_ct_ovc = build_load_ct_ovc_task(dag=dag, default_conf = default_conf)
+# load_patient_labs = build_load_patient_labs_task(dag=dag, default_conf = default_conf)
+# load_ct_patient_status = build_load_ct_patient_status_task(dag=dag, default_conf = default_conf)
+# load_ct_patients = build_load_ct_patients_task(dag=dag, default_conf = default_conf)
+# load_patient_pharmacy = build_load_patient_pharmacy_task(dag=dag, default_conf = default_conf)
+# load_ct_ipt = build_load_ct_ipt_task(dag=dag, default_conf = default_conf)
+# load_drug_alcohol_screening = build_load_drug_alcohol_screening_task(dag=dag, default_conf = default_conf)
+# load_patient_baselines = build_load_patient_baselines_task(dag=dag, default_conf = default_conf)
+# load_depression_screening = build_load_depression_screening_task(dag=dag, default_conf = default_conf)
+# load_enhanced_adherence_counselling = build_load_enhanced_adherence_counselling_task(
+#     dag=dag, default_conf = default_conf)
+load_cancer_screening = build_load_ct_cancer_screening_task(dag=dag, default_conf = default_conf)
 # load_cervical_screening = build_load_ct_cervical_screening_task(dag=dag, default_conf = default_conf)
 
 ods_hts_etl_trigger = TriggerDagRunOperator(
@@ -154,8 +156,10 @@ ods_hts_etl_trigger = TriggerDagRunOperator(
     dag=dag
 )
 
-send_ods_etl_start_email >> load_facilities >> load_ct_patient_visits>> load_ct_ipt >>load_patient_labs>> load_ct_patient_status
-load_ct_patient_status >> load_ct_patients >> load_art_patients >> load_patient_pharmacy >> load_adverse_events
-load_adverse_events >> load_drug_alcohol_screening >> load_depression_screening >> load_patient_baselines >> load_enhanced_adherence_counselling
-load_enhanced_adherence_counselling >> load_ct_allergies >> load_ct_contact_listing >> load_ct_covid >> load_ct_defaulter_tracing
-load_ct_defaulter_tracing >> load_ct_gbv_screening >> load_ct_otz >> load_ct_ovc >> ods_hts_etl_trigger
+load_cancer_screening
+
+# send_ods_etl_start_email >> load_facilities >> load_ct_patient_visits>> load_ct_ipt >>load_patient_labs>> load_ct_patient_status
+# load_ct_patient_status >> load_ct_patients >> load_art_patients >> load_patient_pharmacy >> load_adverse_events
+# load_adverse_events >> load_drug_alcohol_screening >> load_depression_screening >> load_patient_baselines >> load_enhanced_adherence_counselling
+# load_enhanced_adherence_counselling >> load_ct_allergies >> load_ct_contact_listing >> load_ct_covid >> load_ct_defaulter_tracing
+# load_ct_defaulter_tracing >> load_ct_gbv_screening >> load_ct_otz >> load_ct_ovc >> load_cancer_screening >> ods_hts_etl_trigger

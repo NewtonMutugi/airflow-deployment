@@ -23,6 +23,7 @@ from includes.load_intermediate_encounter_hts_tests_task import build_load_inter
 from includes.load_intermediate_prep_last_visit_task import build_load_intermediate_prep_last_visit_task
 from includes.load_intermediate_latest_prep_assessment_task import build_load_intermediate_prep_assessment_task
 from includes.load_intermediate_prep_refills_task import build_load_intermediate_prep_refills_task
+from includes.load_intermediate_pbfw_task import build_load_intermediate_pbfw_task
 
 
 local_tz = pendulum.timezone("Africa/Nairobi")
@@ -104,6 +105,7 @@ load_intermediate_prep_assessment = build_load_intermediate_prep_assessment_task
 load_intermediate_prep_last_visit = build_load_intermediate_prep_last_visit_task(dag = dag, default_conf = default_conf)
 load_intermediate_prep_refills = build_load_intermediate_prep_refills_task(dag = dag, default_conf = default_conf)
 load_intermediate_latest_obs = build_load_intermediate_latest_obs_task(dag = dag, default_conf = default_conf)
+load_intermediate_pbfw = build_load_intermediate_pbfw_task(dag = dag, default_conf = default_conf)
 edw_etl_trigger = TriggerDagRunOperator(
     task_id="trigger_edw_etl",
     trigger_dag_id = "edw_dims_etl_dag",
@@ -115,6 +117,6 @@ intermediate_last_patient_encounter >> intermediate_art_outcomes >> intermediate
 intermediate_latest_viral_loads >> intermediate_latest_weight_height >>  intermediate_ordered_viral_loads  
 intermediate_ordered_viral_loads >> load_pregnancy_as_at >> load_pregnancy_during_art >> load_intermediate_latest_obs >> load_intermediate_encounter_hts_tests
 load_intermediate_encounter_hts_tests >> load_intermediate_prep_assessment
-load_intermediate_prep_assessment >> load_intermediate_prep_last_visit >> load_intermediate_prep_refills >> edw_etl_trigger
+load_intermediate_prep_assessment >> load_intermediate_prep_last_visit >> load_intermediate_prep_refills >> load_intermediate_pbfw >> edw_etl_trigger
 
 
