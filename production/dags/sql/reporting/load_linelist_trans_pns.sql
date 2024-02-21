@@ -1,17 +1,17 @@
-IF OBJECT_ID(N'REPORTING.[dbo].[LineListTransPNS]', N'U') IS NOT NULL 			
+IF OBJECT_ID(N'REPORTING.[dbo].[LineListTransPNS]', N'U') IS NOT NULL
 	drop TABLE REPORTING.[dbo].[LineListTransPNS];
 
 With cte1 as (
-    SELECT distinct 
+    SELECT distinct
 		a.PartnerPatientPk,
 		fac.[MFLCODE] SiteCode,
 		fac.County,
 		fac.SubCounty,
 		a.ScreenedForIpv,
 		a.CccNumber,
-		c.FinalTestResult as FinalResult, 
+		c.FinalTestResult as FinalResult,
 		e.Date DateElicited,
-		f.Date TestDate 
+		f.Date TestDate
 	FROM NDWH.dbo.FactHTSPartnerNotificationServices a
 	LEFT JOIN NDWH.dbo.DimFacility fac on fac.FacilityKey = a.FacilityKey
 	INNER JOIN ODS.dbo.HTS_clients b on b.PatientPkHash=a.PartnerPatientPk and b.SiteCode= fac.[MFLCode]
@@ -19,18 +19,17 @@ With cte1 as (
 	LEFT JOIN NDWH.dbo.DimDate e on a.DateElicitedKey = e.DateKey
 	LEFT JOIN NDWH.dbo.DimDate f on c.DateTestedKey = f.DateKey
 ), cte2 as (
-    SELECT distinct 
+    SELECT distinct
 		a.PartnerPatientPk,
 		fac.MFLCode SiteCode,
 		fac.County,
 		fac.SubCounty,
 		a.ScreenedForIpv,
 		a.CccNumber,
-		c.FinalTestResult as FinalResult, 
+		c.FinalTestResult as FinalResult,
 		e.Date DateElicited,
-		f.Date TestDate, 
+		f.Date TestDate,
 		d.ReportedCCCNumber
--- 			d.ReportedStartARTDate 
 	FROM NDWH.dbo.FactHTSPartnerNotificationServices a
 	LEFT JOIN NDWH.dbo.DimFacility fac on fac.FacilityKey = a.FacilityKey
 	INNER JOIN ODS.dbo.HTS_clients b on b.PatientPkHash=a.PartnerPatientPk and b.SiteCode= fac.[MFLCode]
@@ -39,7 +38,7 @@ With cte1 as (
 	LEFT JOIN NDWH.dbo.DimDate e on a.DateElicitedKey = e.DateKey
 	LEFT JOIN NDWH.dbo.DimDate f on c.DateTestedKey = f.DateKey
 ), combined as (
-    SELECT DISTINCT 
+    SELECT DISTINCT
         f.Mflcode,
         f.FacilityName,
         f.County,
@@ -50,7 +49,7 @@ With cte1 as (
         j.Date HIVDiagnosisDate,
         PartnerPersonID,
         b.PartnerPatientPk,
-        Gender, 
+        Gender,
         Age,
         DATIMAgeGroup  Agegroup,
         RelationsipToIndexClient,
@@ -58,15 +57,15 @@ With cte1 as (
         b.ScreenedForIpv,
         b.IpvScreeningOutcome,
         e.Date,
-        Case 
-            WHEN (b.KnowledgeOfHivStatus='Positive') then 1 
+        Case
+            WHEN (b.KnowledgeOfHivStatus='Positive') then 1
         ELSE 0 End  KnownPositive,
-        PnsConsent, 
+        PnsConsent,
         d.TestDate PartnerTestdate,
         c.FinalResult,
         PnsApproach,
-        Case 
-            WHEN (d.ReportedCCCNumber  is not null ) then 1     
+        Case
+            WHEN (d.ReportedCCCNumber  is not null ) then 1
         ELSE 0 End  Linked,
         d.ReportedCCCNumber,
         FacilityLinkedTo,
@@ -87,7 +86,7 @@ With cte1 as (
     where a.FinalTestResult='Positive'
 )
 
-SELECT  
+SELECT
     Mflcode,
     FacilityName,
     County,
@@ -98,7 +97,7 @@ SELECT
     HIVDiagnosisDate,
     PartnerPersonID,
     PartnerPatientPk,
-    Gender, 
+    Gender,
     Age,
     Agegroup,
     RelationsipToIndexClient,
@@ -107,7 +106,7 @@ SELECT
     IpvScreeningOutcome,
     Date,
     KnownPositive,
-    PnsConsent, 
+    PnsConsent,
     PartnerTestdate,
     FinalResult,
     PnsApproach,
@@ -115,6 +114,6 @@ SELECT
     ReportedCCCNumber,
     FacilityLinkedTo,
     LinkDateLinkedToCare,
-    CAST(GETDATE() AS DATE) AS LoadDate 
+    CAST(GETDATE() AS DATE) AS LoadDate
     INTO REPORTING.dbo.LineListTransPNS
-FROM combined;
+FROM combined
