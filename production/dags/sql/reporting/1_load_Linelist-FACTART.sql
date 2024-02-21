@@ -1,4 +1,4 @@
-IF OBJECT_ID(N'[REPORTING].[dbo].[Linelist_FACTART]', N'U') IS NOT NULL 
+IF OBJECT_ID(N'[REPORTING].[dbo].[Linelist_FACTART]', N'U') IS NOT NULL
 	DROP TABLE [REPORTING].[dbo].[Linelist_FACTART];
 BEGIN
 
@@ -51,7 +51,8 @@ Select distinct
     ART.StartARTAtThisfacility,
     ART.PreviousARTStartDate,
     ART.PreviousARTRegimen,
-    case when outcome.ARTOutcome is null then 'Others'
+    case
+        when outcome.ARTOutcome is null then 'Others'
         else outcome.ARTOutcomeDescription
     end as ARTOutcomeDescription,
     vl.EligibleVL as Eligible4VL,
@@ -79,14 +80,12 @@ Select distinct
     CD4.LastCD4,
     CD4.LastCD4Percentage,
     ART.WhoStage,
-    Case
-        When (age.Age >= 5 AND ART.WhoStage in (3,4)) OR age.Age<5 OR (age.Age >= 5 AND CONVERT(FLOAT, CD4.LastCD4) < 200) Then 1
+    Case When (age.Age >= 5 AND ART.WhoStage in (3,4))
+        OR age.Age<5
+            OR (age.Age >= 5 AND CONVERT(FLOAT, CD4.LastCD4) < 200)Then 1
         Else 0
     End as AHD,
-    CASE
-        WHEN startdate.Date > DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()) - 1, 0) OR ART.WhoStage IN (3, 4) Or Try_cast (LastVL as float) >=200.00 Then 1
-        ELSE 0
-    END AS EligibleCD4,
+    CASE WHEN startdate.Date > DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()) - 1, 0) OR  ART.WhoStage IN (3, 4) Or Try_cast (LastVL as float) >=200.00 Then 1 ELSE 0 END AS EligibleCD4,
     obs.TBScreening,
     PHQ_9_rating,
     ScreenedForDepression,
@@ -94,7 +93,7 @@ Select distinct
     cast (AsOfDateKey as date) as EndofMonthDate,
     cast(getdate() as date) as LoadDate
 INTO [REPORTING].[dbo].[Linelist_FACTART]
-FROM NDWH.dbo.FACTART As ART
+from  NDWH.dbo.FACTART As ART
 left join NDWH.dbo.DimPatient pat on pat.PatientKey = ART.PatientKey
 left join NDWH.dbo.DimPartner partner on partner.PartnerKey = ART.PartnerKey
 left join NDWH.dbo.DimAgency agency on agency.AgencyKey = ART.AgencyKey
