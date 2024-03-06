@@ -2,17 +2,19 @@ from airflow import DAG
 from datetime import datetime, timedelta
 from airflow.contrib.operators.spark_submit_operator import SparkSubmitOperator
 
-def build_load_fact_prep(dag: DAG, default_conf):
-    load_fact_prep = SparkSubmitOperator(task_id='load_fact_prep',
+def build_load_intermediate_pbfw_task(dag: DAG, default_conf):
+    intermediate_pbfw = SparkSubmitOperator(task_id='intermediate_pbfw',
                                                    conn_id=default_conf['connection_id'],
-                                                   application=f"{default_conf['spark_app_home']}/load-fact-prep-1.0-SNAPSHOT-jar-with-dependencies.jar",
-                                                   total_executor_cores=default_conf['default_spark_total_executor_cores'],
+                                                   application=f"{default_conf['spark_app_home']}/load-intermediate-pbfw-1.0-SNAPSHOT-jar-with-dependencies.jar",
+                                                   total_executor_cores=default_conf[
+                                                       'default_spark_total_executor_cores'],
                                                    executor_cores=default_conf['default_spark_executor_cores'],
                                                    executor_memory=default_conf['default_spark_executor_memory'],
                                                    driver_memory=default_conf['default_spark_driver_memory'],
-                                                   name='load_fact_prep',
+                                                   name='intermediate_pbfw',
                                                    conf=default_conf,
-                                                   execution_timeout=timedelta(minutes=600),
+                                                   execution_timeout=timedelta(
+                                                       minutes=600),
                                                    dag=dag
                                                    )
-    return load_fact_prep
+    return intermediate_pbfw
