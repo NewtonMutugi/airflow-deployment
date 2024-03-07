@@ -7,7 +7,7 @@ def build_load_aggregate_concordance_HTSPOS_task(dag: DAG):
     load_aggregate_concordance_HTSPOS_task = MsSqlOperator(task_id='load_aggregate_concordance_HTSPOS_task',
                                               mssql_conn_id='reporting',
                                               execution_timeout=timedelta(minutes=600),
-                                              sql='sql/reporting/load_aggregate_concordance_HTSPOS.sql',
+                                              sql='sql/reporting/load_aggregate_Concordance_HTSPOS.sql',
                                               dag=dag
                                               )
     return load_aggregate_concordance_HTSPOS_task
