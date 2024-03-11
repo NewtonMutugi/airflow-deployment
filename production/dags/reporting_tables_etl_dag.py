@@ -35,7 +35,7 @@ default_args = {
     'retry_delay': timedelta(minutes=5)
 }
 
-dag = DAG(dag_id='reporting_tables_etl_dag',
+dag = DAG(dag_id='reporting_linelist_tables_etl_dag',
           schedule_interval=None,
           default_args=default_args,
           )

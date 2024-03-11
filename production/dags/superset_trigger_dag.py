@@ -24,8 +24,8 @@ dag = DAG(
     schedule_interval='0 4 * * *',
 )
 
-dataset_description = build_superset_dataset_description_trigger_task.superset_dataset_description_trigger
-dataset_refresh = build_superset_dataset_refresh_trigger_task.superset_dataset_refresh_trigger
+dataset_description = build_superset_dataset_description_trigger_task(dag = dag)
+dataset_refresh = build_superset_dataset_refresh_trigger_task(dag = dag)
 
 
 dataset_description >> dataset_refresh
