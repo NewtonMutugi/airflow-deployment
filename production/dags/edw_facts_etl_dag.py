@@ -32,6 +32,8 @@ from includes.load_fact_hts_pos_concordance import build_load_fact_hts_pos_conco
 from includes.load_fact_NCDs_task import build_load_fact_NCDs
 from includes.load_fact_ushauri_appointments_task import build_load_fact_ushauri_appointments
 from includes.load_fact_txcurr_concordance_task import build_load_fact_txcurr_concordance
+from includes.load_fact_iit_risk_scores_task import build_load_fact_iit_risk_scores
+from includes.load_fact_pbfw_task import build_load_fact_pbfw
 
 
 local_tz = pendulum.timezone("Africa/Nairobi")
@@ -181,6 +183,8 @@ load_fact_hts_pos_concordance = build_load_fact_hts_pos_concordance(dag = dag, d
 load_fact_ncds = build_load_fact_NCDs(dag = dag, default_conf = default_conf)
 #load_fact_ushauri_appointments = build_load_fact_ushauri_appointments(dag = dag, default_conf = default_conf)
 load_fact_txcurr_concordance = build_load_fact_txcurr_concordance(dag = dag, default_conf = default_conf)
+load_fact_iit_risk_scores = build_load_fact_iit_risk_scores(dag = dag, default_conf = default_conf)
+load_fact_pbfw = build_load_fact_pbfw(dag = dag, default_conf = default_conf)
 
 
 
@@ -193,6 +197,6 @@ load_fact_adverse_events >> load_fact_cd4 >> load_fact_defaulter_tracing >> load
 load_fact_prep_assessments >> load_fact_manifest >> load_fact_tpt >> load_fact_viral_load
 load_fact_viral_load >> load_fact_patient_exits >> load_fact_prep_discontinuation >> load_fact_prep_refills
 load_fact_prep_refills >> load_fact_prep_visits >> load_fact_appointment >> load_fact_hei >> load_fact_hts_pos_concordance
-load_fact_hts_pos_concordance >>load_fact_ncds >> load_fact_txcurr_concordance
+load_fact_hts_pos_concordance >>load_fact_ncds >> load_fact_txcurr_concordance>> load_fact_iit_risk_scores>>load_fact_pbfw
 # waiting on ODS Table
 # load_fact_ushauri_appointments 
