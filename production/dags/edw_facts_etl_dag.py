@@ -26,6 +26,14 @@ from includes.load_fact_prep_assessments_task import build_load_fact_prep_assess
 from includes.load_fact_prep_discontinuation_task import build_load_fact_prep_discontinuation
 from includes.load_fact_prep_refills_task import build_load_fact_prep_refills
 from includes.load_fact_prep_visits_task import build_load_fact_prep_visits
+from includes.load_fact_appointment_task import build_appointment_fact
+from includes.load_fact_hei_task import build_load_fact_hei
+from includes.load_fact_hts_pos_concordance import build_load_fact_hts_pos_concordance
+from includes.load_fact_NCDs_task import build_load_fact_NCDs
+from includes.load_fact_ushauri_appointments_task import build_load_fact_ushauri_appointments
+from includes.load_fact_txcurr_concordance_task import build_load_fact_txcurr_concordance
+from includes.load_fact_iit_risk_scores_task import build_load_fact_iit_risk_scores
+from includes.load_fact_pbfw_task import build_load_fact_pbfw
 
 
 local_tz = pendulum.timezone("Africa/Nairobi")
@@ -54,6 +62,10 @@ spark_edw_url = Variable.get("SPARK_EDW_URL")
 spark_edw_driver = Variable.get("SPARK_EDW_DRIVER")
 spark_edw_user = Variable.get("SPARK_EDW_USER")
 spark_edw_password = Variable.get("SPARK_EDW_PASSWORD")
+spark_historical_url = Variable.get("SPARK_HISTORICAL_URL")
+spark_historical_driver = Variable.get("SPARK_HISTORICAL_DRIVER")
+spark_historical_user = Variable.get("SPARK_HISTORICAL_USER")
+spark_historical_password = Variable.get("SPARK_HISTORICAL_PASSWORD")
 spark_dim_agency_table = Variable.get("SPARK_DIM_AGENCY_TABLE")
 spark_dim_age_group_table = Variable.get("SPARK_DIM_AGE_GROUP_TABLE")
 spark_dim_art_outcome_table = Variable.get("SPARK_DIM_ART_OUTCOME_TABLE")
@@ -100,6 +112,10 @@ default_conf = {
     "spark.edw.driver": spark_edw_driver,
     "spark.edw.user": spark_edw_user,
     "spark.edw.password": spark_edw_password,
+    "spark.Historical.url": spark_historical_url,
+    "spark.Historical.driver": spark_historical_driver,
+    "spark.Historical.user": spark_historical_user,
+    "spark.Historical.password": spark_historical_password,
     "spark.dimAgency.dbtable": spark_dim_agency_table,
     "spark.dimARTOutcome.dbtable": spark_dim_art_outcome_table,
     "spark.dimAgeGroup.dbtable": spark_dim_age_group_table,
@@ -126,7 +142,7 @@ default_args = {
     'owner': 'kenyahmis',
     'depends_on_past': False,
     'start_date': datetime(2022, 11, 25, tzinfo=local_tz),
-    'email': ['paul.nthusi@thepalladiumgroup.com'],
+    'email': ['paul.nthusi@thepalladiumgroup.com','charles.bett@thepalladiumgroup.com'],
     'email_on_failure': True,
     'email_on_retry': True,
     'retries': 0,
@@ -161,6 +177,14 @@ load_fact_patient_exits = build_load_fact_patient_exits(dag = dag, default_conf 
 load_fact_prep_discontinuation = build_load_fact_prep_discontinuation(dag = dag, default_conf = default_conf)
 load_fact_prep_refills = build_load_fact_prep_refills(dag = dag, default_conf = default_conf)
 load_fact_prep_visits = build_load_fact_prep_visits(dag = dag, default_conf = default_conf)
+load_fact_appointment = build_appointment_fact(dag = dag, default_conf = default_conf)
+load_fact_hei = build_load_fact_hei(dag = dag, default_conf = default_conf)
+load_fact_hts_pos_concordance = build_load_fact_hts_pos_concordance(dag = dag, default_conf = default_conf)
+load_fact_ncds = build_load_fact_NCDs(dag = dag, default_conf = default_conf)
+#load_fact_ushauri_appointments = build_load_fact_ushauri_appointments(dag = dag, default_conf = default_conf)
+load_fact_txcurr_concordance = build_load_fact_txcurr_concordance(dag = dag, default_conf = default_conf)
+load_fact_iit_risk_scores = build_load_fact_iit_risk_scores(dag = dag, default_conf = default_conf)
+load_fact_pbfw = build_load_fact_pbfw(dag = dag, default_conf = default_conf)
 
 
 
@@ -172,4 +196,7 @@ load_fact_hts_test_kits >> load_fact_latest_obs >> load_fact_otz >> load_fact_ov
 load_fact_adverse_events >> load_fact_cd4 >> load_fact_defaulter_tracing >> load_fact_prep_assessments
 load_fact_prep_assessments >> load_fact_manifest >> load_fact_tpt >> load_fact_viral_load
 load_fact_viral_load >> load_fact_patient_exits >> load_fact_prep_discontinuation >> load_fact_prep_refills
-load_fact_prep_refills >> load_fact_prep_visits
+load_fact_prep_refills >> load_fact_prep_visits >> load_fact_appointment >> load_fact_hei >> load_fact_hts_pos_concordance
+load_fact_hts_pos_concordance >>load_fact_ncds >> load_fact_txcurr_concordance>> load_fact_iit_risk_scores>>load_fact_pbfw
+# waiting on ODS Table
+# load_fact_ushauri_appointments 

@@ -1,4 +1,4 @@
-IF OBJECT_ID(N'[REPORTING].[dbo].AggregateDefaulterTracingOutcome', N'U') IS NOT NULL 		
+IF OBJECT_ID(N'[REPORTING].[dbo].AggregateDefaulterTracingOutcome', N'U') IS NOT NULL
 	DROP TABLE [REPORTING].[dbo].AggregateDefaulterTracingOutcome;
 
 BEGIN
@@ -18,7 +18,7 @@ select
     EOMONTH(date.Date) as AsOfDate,
     TracingOutcome,
     count(tracing.PatientKey) as patients,
-    CAST(GETDATE() AS DATE) AS LoadDate  
+    CAST(GETDATE() AS DATE) AS LoadDate
 into REPORTING.dbo.AggregateDefaulterTracingOutcome
 from NDWH.dbo.FactDefaulterTracing tracing
 left join NDWH.dbo.DimPatient as patient on patient.PatientKey = tracing.PatientKey
@@ -28,7 +28,7 @@ left join NDWH.dbo.DimAgency as agency on agency.AgencyKey = tracing.AgencyKey
 left join NDWH.dbo.DimAgeGroup as agegroup on agegroup.AgeGroupKey = tracing.AgeGroupKey
 left join NDWH.dbo.DimDate as date on date.DateKey = tracing.VisitDateKey
 left join NDWH.dbo.DimDifferentiatedCare as diffcare on diffcare.DifferentiatedCareKey = tracing.DifferentiatedCareKey
-group by 
+group by
     facility.FacilityName,
     facility.County,
     facility.SubCounty,

@@ -3,11 +3,11 @@ from datetime import timedelta
 from airflow.providers.microsoft.mssql.operators.mssql import MsSqlOperator
 
 
-def build_load_aggregate_time_to_vl_task(dag: DAG):
-    load_aggregate_time_to_vl_task = MsSqlOperator(task_id='load_aggregate_time_to_vl_task',
+def build_load_linelist_iit_risk_scores_task(dag: DAG):
+    load_linelist_iit_risk_scores_task = MsSqlOperator(task_id='load_linelist_iit_risk_scores_task',
                                               mssql_conn_id='reporting',
                                               execution_timeout=timedelta(minutes=600),
-                                              sql='sql/reporting/load_aggregate_time_to_vl.sql',
+                                              sql='sql/reporting/load_linelist_iit_risk_scores.sql',
                                               dag=dag
                                               )
-    return load_aggregate_time_to_vl_task
+    return load_linelist_iit_risk_scores_task
