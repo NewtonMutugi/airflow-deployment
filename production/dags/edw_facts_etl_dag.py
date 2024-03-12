@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 from airflow.models import Variable
 import pendulum
 from airflow import DAG
+from airflow.operators.trigger_dagrun import TriggerDagRunOperator
 from includes.load_fact_art_history_task import build_art_history_fact
 from includes.load_fact_art_task import build_art_fact
 from includes.load_fact_covid_task import build_covid_fact
@@ -150,7 +151,6 @@ default_args = {
 }
 dag = DAG(dag_id='edw_facts_etl_dag',
           default_args=default_args,
-          catchup=False,
           schedule_interval=None)
 
 art_history = build_art_history_fact(dag = dag, default_conf = default_conf)
@@ -187,6 +187,11 @@ load_fact_iit_risk_scores = build_load_fact_iit_risk_scores(dag = dag, default_c
 load_fact_pbfw = build_load_fact_pbfw(dag = dag, default_conf = default_conf)
 
 
+reporting_linelists_etl_trigger = TriggerDagRunOperator(
+    task_id="trigger_reporting_linelists_etl",
+    trigger_dag_id = "reporting_linelist_tables_etl_dag",
+    dag=dag
+)
 
 
 art_history >> art_fact >> covid_fact >> load_fact_hts_client_linkages >> load_fact_hts_client_tests
@@ -197,6 +202,6 @@ load_fact_adverse_events >> load_fact_cd4 >> load_fact_defaulter_tracing >> load
 load_fact_prep_assessments >> load_fact_manifest >> load_fact_tpt >> load_fact_viral_load
 load_fact_viral_load >> load_fact_patient_exits >> load_fact_prep_discontinuation >> load_fact_prep_refills
 load_fact_prep_refills >> load_fact_prep_visits >> load_fact_appointment >> load_fact_hei >> load_fact_hts_pos_concordance
-load_fact_hts_pos_concordance >>load_fact_ncds >> load_fact_txcurr_concordance>> load_fact_iit_risk_scores>>load_fact_pbfw
+load_fact_hts_pos_concordance >>load_fact_ncds >> load_fact_txcurr_concordance>> load_fact_iit_risk_scores>>load_fact_pbfw>>reporting_linelists_etl_trigger
 # waiting on ODS Table
 # load_fact_ushauri_appointments 
