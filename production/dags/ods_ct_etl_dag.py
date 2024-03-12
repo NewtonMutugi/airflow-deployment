@@ -26,6 +26,8 @@ from includes.load_ct_depression_screening import build_load_depression_screenin
 from includes.load_ct_cancer_screening_task import build_load_ct_cancer_screening_task
 from includes.load_ct_cervical_cancer_screening_task import build_load_ct_cervical_screening_task
 from includes.load_historical_art_outcome_task import build_load_historical_art_outcome_task
+from includes.load_ct_facility_manifest_task import build_load_ct_facility_manifest_task
+from includes.load_ct_iit_risk_scores_task import build_load_ct_iit_risk_scores_task
 from includes.start_ods_etl_task import build_send_ods_etl_start_email_task
 
 local_tz = pendulum.timezone("Africa/Nairobi")
@@ -148,6 +150,8 @@ load_depression_screening = build_load_depression_screening_task(dag=dag, defaul
 load_enhanced_adherence_counselling = build_load_enhanced_adherence_counselling_task(
     dag=dag, default_conf = default_conf)
 load_cancer_screening = build_load_ct_cancer_screening_task(dag=dag, default_conf = default_conf)
+load_ct_facility_manifest = build_load_ct_facility_manifest_task(dag=dag, default_conf = default_conf)
+load_ct_iit_risk_scores = build_load_ct_iit_risk_scores_task(dag=dag, default_conf = default_conf)
 # load_cervical_screening = build_load_ct_cervical_screening_task(dag=dag, default_conf = default_conf)
 
 ods_hts_etl_trigger = TriggerDagRunOperator(
@@ -156,9 +160,8 @@ ods_hts_etl_trigger = TriggerDagRunOperator(
     dag=dag
 )
 
-
-send_ods_etl_start_email >> load_facilities >> load_ct_patient_visits>> load_ct_ipt >>load_patient_labs>> load_ct_patient_status
+send_ods_etl_start_email >> load_facilities >> load_ct_facility_manifest >> load_ct_patient_visits>> load_ct_ipt >>load_patient_labs>> load_ct_patient_status
 load_ct_patient_status >> load_ct_patients >> load_art_patients >> load_patient_pharmacy >> load_adverse_events
 load_adverse_events >> load_drug_alcohol_screening >> load_depression_screening >> load_patient_baselines >> load_enhanced_adherence_counselling
 load_enhanced_adherence_counselling >> load_ct_allergies >> load_ct_contact_listing >> load_ct_covid >> load_ct_defaulter_tracing
-load_ct_defaulter_tracing >> load_ct_gbv_screening >> load_ct_otz >> load_ct_ovc >> load_cancer_screening >> ods_hts_etl_trigger
+load_ct_defaulter_tracing >> load_ct_gbv_screening >> load_ct_otz >> load_ct_ovc >> load_cancer_screening >> load_ct_iit_risk_scores >> ods_hts_etl_trigger
