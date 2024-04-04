@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 import pendulum
 from includes.superset.superset_dataset_description_trigger_task import build_superset_dataset_description_trigger_task
 from includes.superset.superset_dataset_refresh_trigger_task import build_superset_dataset_refresh_trigger_task
+from includes.superset.superset_dataset_create_trigger_task import build_superset_dataset_create_trigger_task
 
 
 local_tz = pendulum.timezone("Africa/Nairobi")
@@ -23,9 +24,9 @@ dag = DAG(
     description='Superset background jobs trigger dag',
     schedule_interval='0 4 * * *',
 )
-
+dataset_create = build_superset_dataset_create_trigger_task(dag = dag)
 dataset_description = build_superset_dataset_description_trigger_task(dag = dag)
 dataset_refresh = build_superset_dataset_refresh_trigger_task(dag = dag)
 
 
-dataset_description >> dataset_refresh
+dataset_create >> dataset_refresh >> dataset_description
