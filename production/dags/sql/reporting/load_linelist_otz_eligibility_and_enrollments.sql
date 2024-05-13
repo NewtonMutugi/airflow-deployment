@@ -1,4 +1,4 @@
-IF OBJECT_ID(N'[REPORTING].[dbo].[LineListOTZEligibilityAndEnrollments]', N'U') IS NOT NULL 			
+IF OBJECT_ID(N'[REPORTING].[dbo].[LineListOTZEligibilityAndEnrollments]', N'U') IS NOT NULL
 	DROP TABLE [REPORTING].[dbo].[LineListOTZEligibilityAndEnrollments];
 
 --- A linelist of ALHIV patients (Enrolled + Not Enrolled to OTZ)
@@ -15,9 +15,9 @@ SELECT DISTINCT
 	age.DATIMAgeGroup as AgeGroup,
 	date.Date as OTZEnrollmentDate,
 	LastVisitDateKey,
-	case 
+	case
 		when outcome.ARTOutcome is null then 'Others'
-		else outcome.ARTOutcomeDescription 
+		else outcome.ARTOutcomeDescription
 	end as ARTOutcomeDescription,
 	TransitionAttritionReason,
 	TransferInStatus,
@@ -52,4 +52,20 @@ LEFT JOIN NDWH.dbo.FactViralLoads vl ON vl.PatientKey = art.PatientKey AND vl.Pa
 FULL OUTER JOIN NDWH.dbo.FactOTZ otz on otz.PatientKey = art.PatientKey
 LEFT JOIN NDWH.dbo.DimDate as date on date.DateKey = otz.OTZEnrollmentDateKey
 LEFT JOIN NDWH.dbo.DimARTOutcome as outcome on outcome.ARTOutcomeKey = art.ARTOutcomeKey
-WHERE age.Age BETWEEN 10 AND 19 AND IsTXCurr = 1;
+WHERE age.Age BETWEEN 10 AND 19 AND IsTXCurr = 1
+GROUP BY
+	MFLCode,
+	f.FacilityName,
+	County,SubCounty,
+	p.PartnerName,
+	a.AgencyName,
+	Gender,
+	age.DATIMAgeGroup,
+	CONVERT (CHAR (7), CAST (CAST(OTZEnrollmentDateKey AS CHAR)AS datetime), 23),
+	TransferInStatus,
+	ModulesPreviouslyCovered,
+	vl.FirstVL,
+	vl.LastVL,
+	vl.ValidVLResult,
+	ValidVLResultCategory2,
+	EOMONTH(date.Date)
