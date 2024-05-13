@@ -53,19 +53,19 @@ FULL OUTER JOIN NDWH.dbo.FactOTZ otz on otz.PatientKey = art.PatientKey
 LEFT JOIN NDWH.dbo.DimDate as date on date.DateKey = otz.OTZEnrollmentDateKey
 LEFT JOIN NDWH.dbo.DimARTOutcome as outcome on outcome.ARTOutcomeKey = art.ARTOutcomeKey
 WHERE age.Age BETWEEN 10 AND 19 AND IsTXCurr = 1
-GROUP BY
-	MFLCode,
-	f.FacilityName,
-	County,SubCounty,
-	p.PartnerName,
-	a.AgencyName,
-	Gender,
-	age.DATIMAgeGroup,
-	CONVERT (CHAR (7), CAST (CAST(OTZEnrollmentDateKey AS CHAR)AS datetime), 23),
-	TransferInStatus,
-	ModulesPreviouslyCovered,
-	vl.FirstVL,
-	vl.LastVL,
-	vl.ValidVLResult,
-	ValidVLResultCategory2,
-	EOMONTH(date.Date)
+-- GROUP BY
+-- 	MFLCode,
+-- 	f.FacilityName,
+-- 	County,SubCounty,
+-- 	p.PartnerName,
+-- 	a.AgencyName,
+-- 	Gender,
+-- 	age.DATIMAgeGroup,
+-- 	CONVERT (CHAR (7), CAST (CAST(OTZEnrollmentDateKey AS CHAR)AS datetime), 23),
+-- 	TransferInStatus,
+-- 	ModulesPreviouslyCovered,
+-- 	vl.FirstVL,
+-- 	vl.LastVL,
+-- 	vl.ValidVLResult,
+-- 	ValidVLResultCategory2,
+-- 	EOMONTH(date.Date)
