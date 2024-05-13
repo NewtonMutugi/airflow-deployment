@@ -1,67 +1,88 @@
-IF EXISTS(SELECT * FROM REPORTING.sys.objects WHERE object_id = OBJECT_ID(N'REPORTING.dbo.LinelistPrep') AND type in (N'U')) 
-    DROP TABLE REPORTING.dbo.LinelistPrep;
+IF EXISTS(SELECT * FROM REPORTING.sys.objects WHERE object_id = OBJECT_ID(N'REPORTING.dbo.LinelistPrep') AND type in (N'U'))
+    DROP TABLE REPORTING.dbo.LinelistPrep
+GO
 
-
-WITH prepCascade AS (
-    SELECT DISTINCT
-        PatientPKHash,
-        prep.PatientKey,
-        MFLCode,
-        prep.FacilityKey,
-        f.FacilityName,
-        County,
-        SubCounty,
-        p.PartnerName,
-        a.AgencyName,
-        pat.Gender,
-        age.DATIMAgeGroup as AgeGroup,
-        ass.month AssessmentMonth,
-        ass.year AssessmentYear,
-        EOMONTH(ass.Date) as AsofDate,
-        EligiblePrep,
-        ScreenedPrep
-
-    FROM NDWH.dbo.FactPrepAssessments prep
-    LEFT JOIN NDWH.dbo.DimFacility f on f.FacilityKey = prep.FacilityKey
-    LEFT JOIN NDWH.dbo.DimAgency a on a.AgencyKey = prep.AgencyKey
-    LEFT JOIN NDWH.dbo.DimPatient pat on pat.PatientKey = prep.PatientKey
-    LEFT JOIN NDWH.dbo.DimAgeGroup age on age.AgeGroupKey=prep.AgeGroupKey
-    LEFT JOIN NDWH.dbo.DimPartner p on p.PartnerKey = prep.PartnerKey
-    LEFT JOIN NDWH.dbo.DimDate ass ON ass.DateKey = AssessmentVisitDateKey
-),
-risk_category_ordering as (
-    select
-        row_number() OVER (PARTITION BY PatientKey ORDER BY VisitDateKey DESC) as num,
-        PatientKey,
-        HIVRiskCategory,
-        VisitDateKey
-    from NDWH.dbo.FactHTSEligibilityextract hiv
-    where HIVRiskCategory is not null
-),
-latest_risk_category as (
-    select
-        *
-    from risk_category_ordering
-    where num = 1
+With TurnedPositive as (
+    Select distinct
+    PatientKey,
+    FinalTestResult,
+    testingdate.[Date] as DateTested
+    from
+    NDWH.dbo.FactHTSClientTests as tests
+    left join NDWH.dbo.DimDate as testingdate on testingdate.[Date]=tests.DateTestedKey
+    where  TestType='Initial Test'
 )
-select
-    Prep.PatientPKHash,
-    Prep.MFLCode,
-    Prep.FacilityName,
-    Prep.County,
-    Prep.SubCounty,
-    Prep.PartnerName,
-    Prep.AgencyName,
-    Prep.Gender,
-    AgeGroup,
-    AssessmentMonth,
-    AssessmentYear,
-    AsofDate,
-    EligiblePrep,
-    ScreenedPrep,
-    HIVRiskCategory as LatestHIVRiskCategory,
-
-    CAST(GETDATE() AS DATE) AS LoadDate
-INTO REPORTING.dbo.LinelistPrep
-from prepCascade prep
-left join latest_risk_category on latest_risk_category.PatientKey = prep.PatientKey;
+SELECT
+       Factkey = IDENTITY(INT, 1, 1)
+      ,PatientPKHash
+      ,SiteCode
+      ,Agency
+      ,PartnerName
+      ,Age
+      ,visit.Date as VisitDate
+      ,tca.Date as   NextAppointmentDate
+      ,VisitID
+      ,BloodPressure
+      ,Temperature
+      ,Weight
+      ,Height
+      ,BMI
+      ,STIScreening
+      ,STISymptoms
+      ,STIPositive
+      ,STINegative
+      ,STITreated
+      ,Circumcised
+      ,VMMCReferral
+      ,LMP
+      ,MenopausalStatus
+      ,PregnantAtThisVisit
+      ,EDD
+      ,PlanningToGetPregnant
+      ,PregnancyPlanned
+      ,PregnancyEnded
+      ,PregnancyEnded.Date as   PregnancyEndDate
+      ,PregnancyOutcome
+      ,BirthDefects
+      ,Breastfeeding
+      ,FamilyPlanningStatus
+      ,FPMethods
+      ,AdherenceDone
+      ,AdherenceOutcome
+      ,AdherenceReasons
+      ,SymptomsAcuteHIV
+      ,ContraindicationsPrep
+      ,PrepTreatmentPlan
+      ,PrepPrescribed
+      ,RegimenPrescribed
+      ,MonthsPrescribed
+      ,CondomsIssued
+      ,Tobegivennextappointment
+      ,Reasonfornotgivingnextappointment
+      ,HepatitisBPositiveResult
+      ,HepatitisCPositiveResult
+      ,VaccinationForHepBStarted
+      ,TreatedForHepB
+      ,VaccinationForHepCStarted
+      ,TreatedForHepC
+      ,NextAppointment
+      ,ClinicalNotes
+      ,ExitDate
+      ,ExitReason
+      ,case when FinalTestResult='Positive' Then 1 Else 0 end as TurnedPositive
+      ,Case when  visit.[Date] is not null  and visit.[Date] > prepenrol.Date Then 1 else 0 End as PrepCT
+      ,prepenrol.date as PrepEnrollmentDate
+      ,CAST(GETDATE() AS DATE) AS LoadDate
+      into REPORTING.dbo.LinelistPrep
+  FROM NDWH.dbo.FactPrepVisits as visits
+    left join NDWH.dbo.DimFacility as fac on fac.FacilityKey=visits.FacilityKey
+    left join NDWH.dbo.DimPatient as pat on pat.PatientKey=visits.PatientKey
+    left join NDWH.dbo.DimPartner as partner on partner.PartnerKey=visits.PartnerKey
+    left join NDWH.dbo.DimAgency as agency on agency.AgencyKey=visits.agencykey
+    left join NDWH.dbo.DimAgeGroup as agegroup on agegroup.AgeGroupKey=visits.AgeGroupKey
+    left JOIN NDWH.dbo.DimDate as visit on visit.DateKey = visits.VisitDateKey
+    left JOIN NDWH.dbo.DimDate as tca on tca.DateKey = visits.NextAppointmentDateKey
+    left JOIN NDWH.dbo.DimDate as PregnancyEnded on PregnancyEnded.DateKey = visits.PregnancyEndDateKey
+    left JOIN NDWH.dbo.DimDate as prepenrol on prepenrol.DateKey = visits.PrepEnrollmentDateKey
+    left join NDWH.dbo.FactPrepDiscontinuation as disc on disc.PatientKey=visits.PatientKey
+    left join TurnedPositive on TurnedPositive.Patientkey=visits.Patientkey and visit.[Date]=DateTested
