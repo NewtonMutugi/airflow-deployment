@@ -2,7 +2,7 @@ IF OBJECT_ID(N'[REPORTING].[dbo].[Linelist_FACTART]', N'U') IS NOT NULL
 	DROP TABLE [REPORTING].[dbo].[Linelist_FACTART];
 BEGIN
 
-WITH ncd_indicators as (
+with ncd_indicators as (
     select
         PatientKey,
         Hypertension as HasHypertension,
@@ -13,10 +13,13 @@ WITH ncd_indicators as (
         IsDiabeticAndDiabetesControlledAtLastTest,
         hypertension.Date as FirstHypertensionRecoredeDate,
         diabetes.Date as FirstDiabetesRecordedDate,
-        [Mental illness]
+        dyslipidemia.Date as FirstDyslipidemiaRecordedDate,
+        [Mental illness],
+        Dyslipidemia
     from NDWH.dbo.FactNCD as ncd
     left join NDWH.dbo.DimDate as hypertension on hypertension.DateKey = ncd.FirstHypertensionRecoredeDateKey
     left join NDWH.dbo.DimDate as diabetes on diabetes.DateKey = ncd.FirstDiabetesRecordedDateKey
+    left join NDWH.dbo.DimDate as dyslipidemia on dyslipidemia.DateKey =ncd.FirstDyslipidemiaRecordedDateKey
 )
 Select distinct
     pat.PatientIDHash,
@@ -87,9 +90,20 @@ Select distinct
     End as AHD,
     CASE WHEN startdate.Date > DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()) - 1, 0) OR  ART.WhoStage IN (3, 4) Or Try_cast (LastVL as float) >=200.00 Then 1 ELSE 0 END AS EligibleCD4,
     obs.TBScreening,
-    PHQ_9_rating,
-    ScreenedForDepression,
-    [Mental illness] as hasMentalIllness,
+    ART.PHQ_9_rating,
+    ART.ScreenedForDepression,
+	ScreenedDepressionDate,
+    case when ncd.[Mental illness] is null then 0 else ncd.[Mental illness] end as HasMentalIllness,
+    case when ncd.Dyslipidemia is null then 0 else ncd.Dyslipidemia end as HasDyslipidemia,
+    onMMD,
+    StabilityAssessment,
+    AppointmentsCategory,
+	art.Pregnant,
+	art.Breastfeeding,
+    art.IsRTTLast12MonthsAfter3monthsIIT,
+    obs.OnIPT,
+    obs.StartIPT,
+    obs.EverOnIPT,
     cast (AsOfDateKey as date) as EndofMonthDate,
     cast(getdate() as date) as LoadDate
 INTO [REPORTING].[dbo].[Linelist_FACTART]
