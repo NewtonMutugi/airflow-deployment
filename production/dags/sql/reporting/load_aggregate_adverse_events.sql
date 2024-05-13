@@ -1,7 +1,8 @@
 
-IF OBJECT_ID(N'[REPORTING].[dbo].AggregateAdverseEvents', N'U') IS NOT NULL 
-	Drop TABLE [REPORTING].[dbo].AggregateAdverseEvents;
+IF OBJECT_ID(N'[REPORTING].[dbo].AggregateAdverseEvents', N'U') IS NOT NULL
+	Drop TABLE [REPORTING].[dbo].AggregateAdverseEvents
 
+GO
 
 with AdverseEvents as (
     SELECT
@@ -48,7 +49,7 @@ SELECT
 	count(*) as AdverseEventsCount,
 	count(DISTINCT PatientKey) as AdverseClientsCount,
     cast(getdate() as date) as LoadDate
-INTO [REPORTING].[dbo].AggregateAdverseEvents 
+INTO [REPORTING].[dbo].AggregateAdverseEvents
 FROM AdverseEvents
 GROUP BY
     MFLCode,
@@ -63,4 +64,5 @@ GROUP BY
     AdverseEventCause,
     AdverseEventActionTaken,
     AdverseEventRegimen,
-    Severity;
+    Severity
+GO
