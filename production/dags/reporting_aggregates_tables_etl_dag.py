@@ -129,7 +129,7 @@ load_aggregate_PBFW = build_load_aggregate_PBFW_task(dag = dag)
 load_aggregate_concordance_HTSPOS = build_load_aggregate_concordance_HTSPOS_task(dag = dag)
 load_aggregate_concordance_TxCurr = build_load_aggregate_concordance_TxCurr_task(dag = dag)
 load_aggregate_durable_ldl = build_load_aggregate_durable_ldl_task(dag = dag)
-load_load_aggregate_khis_hts = build_load_aggregate_khis_hts_task(dag=dag)
+load_aggregate_khis_hts = build_load_aggregate_khis_hts_task(dag=dag)
 
 
 load_aggregate_adverse_events >> load_aggregate_appointment >> load_aggregate_art_history >> load_aggregate_tx_new >> load_aggregate_covid >> load_aggregate_dsd_appts_by_stability >> load_aggregate_dsd_stable >> load_aggregate_dsd >> load_aggregate_dsd_unstable >> load_aggregate_heis >> load_aggregate_PBFW >> load_aggregate_expecteduploads >> load_aggregate_durable_ldl
@@ -137,4 +137,4 @@ load_aggregate_durable_ldl >> load_aggregate_hts_client_self_tested >> load_aggr
 load_aggregate_hts_pns_sexualpartner >> load_aggregate_hts_pnschildren >> load_aggregate_hts_tbscreening >> load_aggregate_hts_teststrategy  >> load_aggregate_hts_uptake >> load_aggregate_iit_tracing_status >> load_aggregate_nupi >> load_aggregate_optimize_current_regimens  >> load_aggregate_optimize_start_regimens >> load_aggregate_time_to_vl >> load_aggregate_prep_cascade
 load_aggregate_prep_cascade >> load_aggregate_recencyuploads >> load_aggregate_time_to_art_grp  >> load_aggregate_time_to_art_last_12m >> load_aggregate_time_to_art  >> load_aggregate_time_to_first_vl_grp >> load_aggregate_time_to_vl_12m >> load_aggregate_otz  >> load_aggregate_TPT  >> load_aggregate_treatmentoutcomes >> load_aggregate_txcurr
 load_aggregate_txcurr >> load_aggregate_tx_new_hts_cascade  >> load_aggregate_vl_outcome_and_uptake >> load_aggregate_otz_eligibility_and_enrollments >> load_aggregate_otz_outcome >> load_aggregate_ovc_count >> load_aggregate_prep_STIOutcomes >> load_aggregate_prep_discontinuations >> load_aggregate_prep_testing_at_1month_refill >> load_aggregate_prep_testing_at_3month_refill
-load_aggregate_prep_testing_at_3month_refill >> load_aggregate_concordance_HTSPOS >> load_aggregate_concordance_TxCurr >> load_load_aggregate_khis_hts
+load_aggregate_prep_testing_at_3month_refill >> load_aggregate_concordance_HTSPOS >> load_aggregate_concordance_TxCurr >> load_aggregate_khis_hts
